@@ -132,43 +132,23 @@ public class GamePanel extends JPanel implements ActionListener{
         public void mousePressed(MouseEvent e){
             prePt = e.getPoint();
             check = 0;
-            System.out.println(check);
         }
         public void mouseReleased(MouseEvent e){
             if (backyard.qualifiedPosition(e)[2] != 1){
-                check = 0;
                 imageCorner = new Point(0,0);
-                a = 0;
-                b = 0;
             }
             else{
-                a = backyard.qualifiedPosition(e)[0] - WIDTH/2;
-                b = backyard.qualifiedPosition(e)[1] - HEIGHT;
-                check = 1;
-                System.out.println(a);
-                System.out.println(b);
-                System.out.println(check);
+                imageCorner = new Point(backyard.qualifiedPosition(e)[0]-WIDTH/2,backyard.qualifiedPosition(e)[1]-HEIGHT);
             }
         }
         
-        /*public void mousePressed(MouseEvent e){
-                prePt = e.getPoint();   
-        }*/
     }
     //drag the image by mouse
     private class DragListener extends MouseMotionAdapter{
         public void mouseDragged(MouseEvent e){
             Point currentPt = e.getPoint();
-            if (backyard.qualifiedPosition(e)[2] != 1)
-                imageCorner.translate((int)(currentPt.getX()-prePt.getX()),(int)(currentPt.getY()-prePt.getY()));
-            else{
-                currentPt.translate((int)(backyard.qualifiedPosition(e)[0]-imageCorner.getX()),(int)(backyard.qualifiedPosition(e)[1]-imageCorner.getY()));
-                imageCorner = new Point(backyard.qualifiedPosition(e)[0], backyard.qualifiedPosition(e)[1]);
-            }
-            System.out.println(imageCorner.getX());
-            System.out.println(imageCorner.getY());
+            imageCorner.translate((int)(currentPt.getX()-prePt.getX()),(int)(currentPt.getY()-prePt.getY()));
             prePt = currentPt;
-
             repaint();
         }
     }

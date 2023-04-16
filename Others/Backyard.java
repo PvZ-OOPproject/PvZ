@@ -1,6 +1,5 @@
 package Others;
 
-import java.awt.Point;
 import java.awt.event.MouseEvent;
 
 public class Backyard {
