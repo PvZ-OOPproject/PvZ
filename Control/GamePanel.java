@@ -36,14 +36,7 @@ public class GamePanel extends JPanel implements ActionListener{
     Point prePt;
     int i = 0;
 
-    //declare backyard
-    Backyard backyard;
-
-    ObjectPvZ object;
-
-    int check = 0;
-    int a;
-    int b;
+    int check;
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(PANEL_WIDTH,PANEL_HEIGHT)); //set the size of this class
@@ -62,8 +55,6 @@ public class GamePanel extends JPanel implements ActionListener{
         this.addMouseListener(clickListener);
         this.addMouseMotionListener(dragListener);
         
-
-        backyard = new Backyard();
         object = new ObjectPvZ(0,10);
 
 
@@ -97,20 +88,6 @@ public class GamePanel extends JPanel implements ActionListener{
         g2D.drawLine(810,0,810,600);
         g2D.drawLine(890,0,890,600);
         g2D.drawLine(970,0,970,600);
-        
-        //draw Zombie moving
-        /*g2D.drawImage(zombie,x,y,null);
-        g2D.drawImage(zombie,x,y+100,null);
-        g2D.drawImage(zombie,x,y+200,null);
-        g2D.drawImage(zombie,x,y+300,null);
-        g2D.drawImage(zombie,x,y+400,null);*/
-
-        /*for(int i = 0; i < 5; i++){
-            g2D.drawImage(zombie,x,backyard.getRows()[i],null);
-        }*/
-
-        //drag.addPlants(g2D, 200);
-        object.addZombies(g2D,x);
 
         //draw plants can be clicked
 
