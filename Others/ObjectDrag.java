@@ -23,14 +23,22 @@ public class ObjectDrag {
     }
 
     public void update(){
-        for(int i=0; i < 3;i++){
+        for(int i=1; i < 8;i++){
             //int j = random.nextInt(4);
             int j = 1;
             switch(j){
                 case 1:{
-                    plantsList.add(new PeaShooter(4, 200, random.nextInt(200), 20));
+                    plantsCardList.add(new PeaShooter(4, 200, 80 + (i-1)*52, 5));
                     break; 
                 }
+                case 2:{
+                    plantsCardList.add(new SunFlower(50, 200, 100+random.nextInt(200), 100));
+                    break;                     
+                }
+                case 3:{
+                    plantsCardList.add(new walnut(500, 200, 100+random.nextInt(200), 100));
+                    break;                     
+                }                
             }
         }
     }
