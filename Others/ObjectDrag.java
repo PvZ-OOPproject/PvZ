@@ -1,23 +1,23 @@
 package Others;
 
 import java.awt.*;
+
 import java.util.ArrayList;
 import java.util.Random;
 
+
+import Control.GamePanel;
 import Plants.PeaShooter;
 import Plants.Plants;
+import Plants.SunFlower;
+import Plants.walnut;
 
 public class ObjectDrag {
-    Image image;
-    Point imageCorner;
-    Point prePt;
-    public static ArrayList<Plants> plantsList;
+    public static ArrayList<Plants> plantsCardList;
     Random random;
 
-    public ObjectDrag(int x,int y,Image image){
-        imageCorner = new Point(x,y);
-        this.image = image;
-        plantsList = new ArrayList<Plants>();
+    public ObjectDrag(){
+        plantsCardList = new ArrayList<Plants>();
         random = new Random();
         update();
     }
@@ -43,10 +43,18 @@ public class ObjectDrag {
         }
     }
 
-    public void addPlants(Graphics2D g2D,int x){
-        for(Plants i : plantsList){
-            g2D.drawImage(i.getImage(), x, i.getYCoordinate(), null);
+    public void addPlantsCard(GamePanel panel,Graphics g){
+        for(Plants i : plantsCardList){
+            i.cardImage.paintIcon(panel, g ,(int) i.imageCorner.getX(),(int) i.imageCorner.getY());
         }
     }
+
+    public void addPlants(GamePanel panel,Graphics g){
+        for(Plants i : plantsCardList){
+            
+            //image.paintIcon(panel, g,i.getXCoordinate(), i.getYCoordinate());
+        }
+    }
+    
 
 }
