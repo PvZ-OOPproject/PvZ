@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 import Others.Backyard;
+import Others.Card;
+import Others.ObjectDrag;
 import Others.ObjectPvZ;
 
 import java.awt.event.MouseMotionAdapter;
@@ -28,18 +30,16 @@ public class GamePanel extends JPanel implements ActionListener{
     int x = 1200;
     int y = 20;
 
-    //variable to control by mouse
-    ImageIcon image = new ImageIcon("zombie_normal.gif");
-    final int WIDTH = image.getIconWidth();
-    final int HEIGHT = image.getIconHeight();
     Point imageCorner;
     Point prePt;
-    int i = 0;
+    int check1 = 0;
+    int check2;
 
     Backyard backyard;
     ObjectPvZ object;
+    ObjectDrag objectDrag;
+    Card card;
 
-    int check;
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(PANEL_WIDTH,PANEL_HEIGHT)); //set the size of this class
@@ -58,8 +58,11 @@ public class GamePanel extends JPanel implements ActionListener{
         this.addMouseListener(clickListener);
         this.addMouseMotionListener(dragListener);
         
+        objectDrag = new ObjectDrag();
         object = new ObjectPvZ(0,10);
         backyard = new Backyard();
+        card = new Card();
+
 
         timer = new Timer(10,this); //set up a loop of game
         timer.start(); //run game
@@ -70,6 +73,8 @@ public class GamePanel extends JPanel implements ActionListener{
         super.paint(g); //paint background
 
         Graphics2D g2D = (Graphics2D) g;
+
+        
         g2D.drawImage(backyardImage,0,0, null); // draw backyard
         
         // draw grid
@@ -92,11 +97,14 @@ public class GamePanel extends JPanel implements ActionListener{
         g2D.drawLine(890,0,890,600);
         g2D.drawLine(970,0,970,600);
 
-        //draw plants can be clicked
+        g2D.drawLine(80,0,80,600);
+        g2D.drawLine(440,0,440,600);
+        g2D.drawLine(0,75,1066,75);
 
         object.addZombies(g2D, x);
+        objectDrag.addPlantsCard(this,g);
 
-        image.paintIcon(this, g,(int) imageCorner.getX(),(int)imageCorner.getY());
+        //draw plants can be clicked
 
     }
 
@@ -113,24 +121,37 @@ public class GamePanel extends JPanel implements ActionListener{
     private class ClickListener extends MouseAdapter{
         public void mousePressed(MouseEvent e){
             prePt = e.getPoint();
-            check = 0;
+            System.out.println(e.getX());
+            System.out.println(e.getY());
+            System.out.println(card.qualifiedPosition(e)[1]);
+            if (card.qualifiedPosition(e)[1] == 1 && check1 == 0){
+                check2 = card.qualifiedPosition(e)[0];
+                check1++;
+            }
+            System.out.println(check2);
         }
         public void mouseReleased(MouseEvent e){
             if (backyard.qualifiedPosition(e)[2] != 1){
-                imageCorner = new Point(0,0);
+                ObjectDrag.plantsCardList.get(check2).imageCorner = new Point((int)ObjectDrag.plantsCardList.get(check2).imageFirstPoint.getX(),(int)ObjectDrag.plantsCardList.get(check2).imageFirstPoint.getY());
             }
             else{
-                imageCorner = new Point(backyard.qualifiedPosition(e)[0]-WIDTH/2,backyard.qualifiedPosition(e)[1]-HEIGHT);
+                int a = ObjectDrag.plantsCardList.get(check2).WIDTH;
+                int b = ObjectDrag.plantsCardList.get(check2).HEIGHT;
+                ObjectDrag.plantsCardList.get(check2).imageCorner = new Point(backyard.qualifiedPosition(e)[0]-a/2,backyard.qualifiedPosition(e)[1]-b);
             }
+            check1 = 0;
         }
         
     }
     //drag the image by mouse
     private class DragListener extends MouseMotionAdapter{
         public void mouseDragged(MouseEvent e){
+            System.out.println(1);
             Point currentPt = e.getPoint();
-            imageCorner.translate((int)(currentPt.getX()-prePt.getX()),(int)(currentPt.getY()-prePt.getY()));
+            ObjectDrag.plantsCardList.get(check2).imageCorner.translate((int)(currentPt.getX()-prePt.getX()),(int)(currentPt.getY()-prePt.getY()));
             prePt = currentPt;
+            System.out.println(e.getX());
+            System.out.println(e.getY());
             repaint();
         }
     }

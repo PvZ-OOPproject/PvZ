@@ -1,13 +1,10 @@
 package Others;
 
 import java.awt.Graphics2D;
-import java.awt.Image;
+
 import java.util.ArrayList;
 import java.util.Random;
 
-import javax.swing.ImageIcon;
-
-import Plants.Plants;
 import Zombies.Zombie_normal;
 import Zombies.Zombies;
 
