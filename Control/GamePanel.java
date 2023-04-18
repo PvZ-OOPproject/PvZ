@@ -34,6 +34,7 @@ public class GamePanel extends JPanel implements ActionListener{
     Point prePt;
     int check1 = 0;
     int check2;
+    int check3 = 0;
 
     Backyard backyard;
     ObjectPvZ object;
@@ -64,8 +65,8 @@ public class GamePanel extends JPanel implements ActionListener{
         card = new Card();
 
 
-        timer = new Timer(10,this); //set up a loop of game
-        timer.start(); //run game
+        //timer = new Timer(10,this); //set up a loop of game
+        //timer.start(); //run game
     }
 
     public void paint(Graphics g){
@@ -103,15 +104,16 @@ public class GamePanel extends JPanel implements ActionListener{
 
         object.addZombies(g2D, x);
         objectDrag.addPlantsCard(this,g);
-
+        objectDrag.updatePeaList(this,g);
+        
         //draw plants can be clicked
-
     }
 
     //repaint the panel
     @Override
     public void actionPerformed(ActionEvent e) {
         x -= xVelocity;
+        //objectDrag.addUpdatePea();
         repaint(); //another way to call method paint many times
 
     }
@@ -121,14 +123,13 @@ public class GamePanel extends JPanel implements ActionListener{
     private class ClickListener extends MouseAdapter{
         public void mousePressed(MouseEvent e){
             prePt = e.getPoint();
-            System.out.println(e.getX());
-            System.out.println(e.getY());
-            System.out.println(card.qualifiedPosition(e)[1]);
+            //System.out.println(e.getX());
+            //System.out.println(e.getY());
+            //System.out.println(card.qualifiedPosition(e)[1]);
             if (card.qualifiedPosition(e)[1] == 1 && check1 == 0){
                 check2 = card.qualifiedPosition(e)[0];
                 check1++;
             }
-            System.out.println(check2);
         }
         public void mouseReleased(MouseEvent e){
             if (backyard.qualifiedPosition(e)[2] != 1){
@@ -138,6 +139,7 @@ public class GamePanel extends JPanel implements ActionListener{
                 int a = ObjectDrag.plantsCardList.get(check2).WIDTH;
                 int b = ObjectDrag.plantsCardList.get(check2).HEIGHT;
                 ObjectDrag.plantsCardList.get(check2).imageCorner = new Point(backyard.qualifiedPosition(e)[0]-a/2,backyard.qualifiedPosition(e)[1]-b);
+                ObjectDrag.plantsCardList.get(check2).check++;
             }
             check1 = 0;
         }
@@ -146,14 +148,15 @@ public class GamePanel extends JPanel implements ActionListener{
     //drag the image by mouse
     private class DragListener extends MouseMotionAdapter{
         public void mouseDragged(MouseEvent e){
-            System.out.println(1);
             Point currentPt = e.getPoint();
             ObjectDrag.plantsCardList.get(check2).imageCorner.translate((int)(currentPt.getX()-prePt.getX()),(int)(currentPt.getY()-prePt.getY()));
             prePt = currentPt;
-            System.out.println(e.getX());
-            System.out.println(e.getY());
             repaint();
         }
     }
+    /*@Override
+    /*public void run() {
+
+    }*/
 
 }
