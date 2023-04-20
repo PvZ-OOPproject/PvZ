@@ -16,12 +16,13 @@ import Plants.walnut;
 public class ObjectDrag {
     public static ArrayList<Plants> plantsCardList;
     public static ArrayList<Plants> plantsList;
-    public static ArrayList<Pea> peaUpdateList = new ArrayList<>();
+    public static ArrayList<Pea> peaUpdateList;
     Random random;
 
     public ObjectDrag(){
         plantsCardList = new ArrayList<Plants>();
         plantsList = new ArrayList<Plants>();
+        peaUpdateList = new ArrayList<>();
         random = new Random();
         update();
     }
@@ -32,7 +33,7 @@ public class ObjectDrag {
             int j = 1;
             switch(j){
                 case 1:{
-                    plantsCardList.add(new PeaShooter(4, 200, 80 + (i-1)*52, 5));
+                    plantsCardList.add(new PeaShooter(4, 10, 80 + (i-1)*52, 5));
                     break; 
                 }
                 case 2:{
@@ -48,15 +49,13 @@ public class ObjectDrag {
     }
 
 
-    public void addPlantsCard(GamePanel panel,Graphics g){
+    public void drawPlantsCard(GamePanel panel,Graphics g){
         for(Plants i : plantsCardList){
             if (i.check == 0)
                 i.cardImage.paintIcon(panel, g ,(int) i.imageCorner.getX(),(int) i.imageCorner.getY());
             else{
-                //i.cardImage.paintIcon(panel, g ,(int) i.imageFirstPoint.getX(),(int) i.imageFirstPoint.getY());
-                //i.image.paintIcon(panel, g ,(int) i.imageCorner.getX(),(int) i.imageCorner.getY());
                 PeaShooter peaShooter = new PeaShooter(4, 200,(int) i.imageCorner.getX(),(int) i.imageCorner.getY());
-                Pea pea = new Pea(200,peaShooter.getXCoordinate() , peaShooter.getYCoordinate());
+                Pea pea = new Pea(50,peaShooter.getXCoordinate() , peaShooter.getYCoordinate());
                 peaShooter.addPea(pea);
                 peaUpdateList.add(pea);
                 plantsList.add(peaShooter);
@@ -67,24 +66,37 @@ public class ObjectDrag {
             }
 
         }
-        addPlants(panel, g);
 
     }
 
-    public static void addPlants(GamePanel panel,Graphics g){
+    public void drawPlants(GamePanel panel,Graphics g){
         for(Plants j : plantsList){
-            j.image.paintIcon(panel, g ,(int) j.currentPoint.getX(),(int) j.currentPoint.getY());
+            if (j.isActive())
+                j.image.paintIcon(panel, g ,(int) j.currentPoint.getX(),(int) j.currentPoint.getY());
         }
     }
 
-    public void updatePeaList(GamePanel panel,Graphics g){
+    public void updatePeaList(){
         for(Pea i : peaUpdateList){
-            i.image.paintIcon(panel,g,i.getX(),(int) i.getY());
             i.updatePea();
-            //System.out.println(i.getX());
         }
+    }
+
+    public void drawPeaList(GamePanel panel,Graphics g){
+        for(Pea i : peaUpdateList){
+            if (!i.getStop())
+                if (i.isActive())
+                    i.getImage().paintIcon(panel,g,i.getX(),(int) i.getY());
+        }        
     }
     
+    public ArrayList<Pea> getPeaUpdateList(){
+        return peaUpdateList;
+    }
+
+    public ArrayList<Plants> getPlantsList(){
+        return plantsList;
+    }
 
 
 

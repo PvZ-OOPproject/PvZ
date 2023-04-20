@@ -16,7 +16,7 @@ public class Card {
         }        
     }    
 
-    public int[] qualifiedPosition(MouseEvent e){
+    public int[] qualifiedPositionCard(MouseEvent e){
         int a[] = {0,0};
         if (rows[0] <= e.getY() && e.getY() <= rows[1]){
             for(int i = 0;i < 8;i++){

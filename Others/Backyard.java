@@ -25,11 +25,7 @@ public class Backyard {
         }        
     }
 
-    public void addZombies(){
-
-    }
-
-    public int[] qualifiedPosition(MouseEvent e){
+    public int[] qualifiedPositionBackyard(MouseEvent e){
         int[] a = {0,0,0};
         for(int i = 0; i < 5;i++)
             for(int j = 1; j < 10;j++)

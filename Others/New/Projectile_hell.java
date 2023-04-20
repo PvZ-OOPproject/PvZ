@@ -4,12 +4,12 @@ package Others.New;
 import java.awt.geom.Rectangle2D;
 import static Others.New.Constants.Projectiles.*;
 
-public class Projectile {
+public class Projectile_hell {
     private Rectangle2D.Float hitBox;
     private int dir;
     private boolean active = true;
 
-    public Projectile(int x, int y, int dir){
+    public Projectile_hell(int x, int y, int dir){
         hitBox = new Rectangle2D.Float(x,y,PEA_WIDTH,PEA_HEIGHT);
         this.dir = dir;
     }
