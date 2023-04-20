@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class ObjectManager {
     private BufferedImage spikeImg, PeaImg;
-    private ArrayList<Projectile> projectiles = new ArrayList<>();
+    private ArrayList<Projectile_hell> projectiles = new ArrayList<>();
 
     public ObjectManager(){
         loadImgs();

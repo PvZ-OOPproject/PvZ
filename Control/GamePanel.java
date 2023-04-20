@@ -16,54 +16,41 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 
-public class GamePanel extends JPanel implements ActionListener{
+public class GamePanel extends JPanel implements ActionListener,Runnable{
     //size of panel
     final int PANEL_WIDTH = 1066;
     final int PANEL_HEIGHT = 600;
 
-    //variable test
-    Image zombie;
-    Image backyardImage;
-    Timer timer;
-    int xVelocity = 1;
-    int yVelocity = 1;
-    int x = 1200;
-    int y = 20;
+    //Timer timer;
 
-    Point imageCorner;
     Point prePt;
     int check1 = 0;
     int check2;
-    int check3 = 0;
 
     Backyard backyard;
     ObjectPvZ object;
     ObjectDrag objectDrag;
     Card card;
 
-
     public GamePanel(){
+        
         this.setPreferredSize(new Dimension(PANEL_WIDTH,PANEL_HEIGHT)); //set the size of this class
         this.setBackground(Color.black); //set background as black
         this.setDoubleBuffered(true); //set true: all the drawing from this component will be done in an offscreen painting buffer
         //in short, enabling this can improve game's rendering performance
         
-        //declare test
-        zombie = new ImageIcon("zombie_normal.gif").getImage();
-        backyardImage = new ImageIcon("backyard.png").getImage();
-        
         //DragPanel: use mouse to control plants
-        imageCorner = new Point(0,0);
         ClickListener clickListener = new ClickListener();
         DragListener dragListener = new DragListener();
         this.addMouseListener(clickListener);
         this.addMouseMotionListener(dragListener);
         
         objectDrag = new ObjectDrag();
-        object = new ObjectPvZ(0,10);
+        object = new ObjectPvZ(1);
         backyard = new Backyard();
         card = new Card();
 
+        startGameThread();
 
         //timer = new Timer(10,this); //set up a loop of game
         //timer.start(); //run game
@@ -75,8 +62,7 @@ public class GamePanel extends JPanel implements ActionListener{
 
         Graphics2D g2D = (Graphics2D) g;
 
-        
-        g2D.drawImage(backyardImage,0,0, null); // draw backyard
+        g2D.drawImage(new ImageIcon("backyard.png").getImage(),0,0, null); // draw backyard
         
         // draw grid
         g2D.setColor(Color.BLACK);
@@ -102,19 +88,21 @@ public class GamePanel extends JPanel implements ActionListener{
         g2D.drawLine(440,0,440,600);
         g2D.drawLine(0,75,1066,75);
 
-        object.addZombies(g2D, x);
-        objectDrag.addPlantsCard(this,g);
-        objectDrag.updatePeaList(this,g);
+        object.drawZombies(this, g);
         
-        //draw plants can be clicked
+        objectDrag.drawPlantsCard(this,g);
+        objectDrag.drawPlants(this, g);
+
+        objectDrag.drawPeaList(this,g);
+
+        
     }
 
     //repaint the panel
     @Override
     public void actionPerformed(ActionEvent e) {
-        x -= xVelocity;
-        //objectDrag.addUpdatePea();
-        repaint(); //another way to call method paint many times
+        //x -= xVelocity;
+        repaint(); 
 
     }
 
@@ -123,22 +111,19 @@ public class GamePanel extends JPanel implements ActionListener{
     private class ClickListener extends MouseAdapter{
         public void mousePressed(MouseEvent e){
             prePt = e.getPoint();
-            //System.out.println(e.getX());
-            //System.out.println(e.getY());
-            //System.out.println(card.qualifiedPosition(e)[1]);
-            if (card.qualifiedPosition(e)[1] == 1 && check1 == 0){
-                check2 = card.qualifiedPosition(e)[0];
+            if (card.qualifiedPositionCard(e)[1] == 1 && check1 == 0){
+                check2 = card.qualifiedPositionCard(e)[0];
                 check1++;
             }
         }
         public void mouseReleased(MouseEvent e){
-            if (backyard.qualifiedPosition(e)[2] != 1){
+            if (backyard.qualifiedPositionBackyard(e)[2] != 1){
                 ObjectDrag.plantsCardList.get(check2).imageCorner = new Point((int)ObjectDrag.plantsCardList.get(check2).imageFirstPoint.getX(),(int)ObjectDrag.plantsCardList.get(check2).imageFirstPoint.getY());
             }
             else{
                 int a = ObjectDrag.plantsCardList.get(check2).WIDTH;
                 int b = ObjectDrag.plantsCardList.get(check2).HEIGHT;
-                ObjectDrag.plantsCardList.get(check2).imageCorner = new Point(backyard.qualifiedPosition(e)[0]-a/2,backyard.qualifiedPosition(e)[1]-b);
+                ObjectDrag.plantsCardList.get(check2).imageCorner = new Point(backyard.qualifiedPositionBackyard(e)[0]-a/2,backyard.qualifiedPositionBackyard(e)[1]-b);
                 ObjectDrag.plantsCardList.get(check2).check++;
             }
             check1 = 0;
@@ -154,9 +139,45 @@ public class GamePanel extends JPanel implements ActionListener{
             repaint();
         }
     }
-    /*@Override
-    /*public void run() {
 
-    }*/
+    private Thread gameThread;
+    int FPS = 50;
+    public void startGameThread(){
+        gameThread = new Thread(this);//instantiate a thread //passing GamePanel to thread's constructor 
+        gameThread.start(); //let start a thread //automatically call run method
+    }
+
+    public void update(){
+        objectDrag.updatePeaList();
+        object.updateZombies();
+        object.checkCollision(objectDrag.getPlantsList(), objectDrag.getPeaUpdateList());
+    }
+    @Override
+    public void run() {
+        double drawInterval = 1000000000/FPS;
+        double delta = 0;
+        long lastTime = System.nanoTime();
+        long currentTime;
+        long timer = 0; 
+        int drawCount = 0;
+        while(gameThread != null){
+            currentTime = System.nanoTime();
+            delta += (currentTime - lastTime) / drawInterval;
+            timer += (currentTime - lastTime);
+            lastTime = currentTime;
+            if (delta >= 1){
+                update();
+                repaint();
+                delta--;
+                drawCount++;             
+            }
+            // display FPS
+            if (timer >= 1000000000){
+                System.out.println("FPS:"+drawCount);
+                timer = 0;
+                drawCount = 0;
+            }  
+        }
+    }
 
 }

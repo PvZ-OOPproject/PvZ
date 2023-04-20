@@ -1,14 +1,13 @@
 package Plants;
 
-import java.awt.Graphics;
 import java.awt.Point;
-import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
-import Control.GamePanel;
+import Others.Projectile;
+import Zombies.Zombies;
 
-public class Plants {
+public class Plants extends Projectile{
     private int plantDamage;
     private int plantHealth;
     private int xCoordinate;
@@ -27,6 +26,7 @@ public class Plants {
     public int check = 0;
 
     public Plants(int plantDamage,int plantHealth,int x,int y,ImageIcon image,ImageIcon cardImage,String name){
+        super(x,y,0,image.getIconWidth(),image.getIconHeight());
         this.plantDamage = plantDamage;
         this.plantHealth = plantHealth;
         this.xCoordinate = x;
@@ -46,6 +46,10 @@ public class Plants {
         return plantDamage;
     }
 
+    public int getHealth(){
+        return plantHealth;
+    }
+
     public int getXCoordinate(){
         return xCoordinate;
     }
@@ -58,12 +62,24 @@ public class Plants {
         return image;
     }
 
+    public Point getImageFirstPoint(){
+        return imageFirstPoint;
+    }
+
+    public String getName(){
+        return name;
+    }
+
     public ImageIcon getCardImage(){
         return cardImage;
     }
 
-    public void drawPea(GamePanel panel,Graphics g){}
-
-    public void addPea(int i) {
+    public void plantHit(Zombies zombie){
+        if (isActive()){
+            plantHealth -= zombie.getDamage();
+            if (plantHealth <= 0)
+                setActive(false);
+        }
     }
+
 }
