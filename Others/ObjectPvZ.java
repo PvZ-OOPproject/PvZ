@@ -81,18 +81,19 @@ public class ObjectPvZ {
                     else
                         i.setStop(false);
                 }
-                for(Pea k : peaUpdateList){
-                    for(Plants m : removeList){
-                        if ((int) m.getImageFirstPoint().getX() == k.getXFirstCoordinate())
-                            k.setStop(true);
-                    }
-                    if (i.getHitBox().intersects(k.getHitBox())){
-                        if (k.isActive()){
-                            i.zombieHit(k);
-                            k.setActive(false);
+                if (i.getXCoordinate() <= 1000)
+                    for(Pea k : peaUpdateList){
+                        for(Plants m : removeList){
+                            if ((int) m.getImageFirstPoint().getX() == k.getXFirstCoordinate())
+                                k.setStop(true);
+                        }
+                        if (i.getHitBox().intersects(k.getHitBox())){
+                            if (k.isActive()){
+                                i.zombieHit(k);
+                                k.setActive(false);
+                            }
                         }
                     }
-                }
             }
         }
     }
