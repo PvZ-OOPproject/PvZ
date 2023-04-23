@@ -14,8 +14,8 @@ public class Plants extends Projectile{
     private int yCoordinate;
     protected static int plantCount = 0;
     public String name;
-
-    
+    private int plantsValue;
+   
     public ImageIcon image;
     public int WIDTH;
     public int HEIGHT;
@@ -25,7 +25,7 @@ public class Plants extends Projectile{
     public Point currentPoint;
     public int check = 0;
 
-    public Plants(int plantDamage,int plantHealth,int x,int y,ImageIcon image,ImageIcon cardImage,String name){
+    public Plants(int plantDamage,int plantHealth,int x,int y,ImageIcon image,ImageIcon cardImage,String name,int plantsValue){
         super(x,y,0,image.getIconWidth(),image.getIconHeight());
         this.plantDamage = plantDamage;
         this.plantHealth = plantHealth;
@@ -39,6 +39,7 @@ public class Plants extends Projectile{
         this.currentPoint = new Point(x,y);
         this.WIDTH = cardImage.getIconWidth();
         this.HEIGHT = cardImage.getIconHeight();
+        this.plantsValue = plantsValue;
         plantCount++;
     }
 
@@ -54,12 +55,24 @@ public class Plants extends Projectile{
         return xCoordinate;
     }
 
+    public void setXCoordinate(int x){
+        this.xCoordinate = x;
+    }
+
+    public void setYCoordinate(int y){
+        this.yCoordinate = y;
+    }
+
     public int getYCoordinate(){
         return yCoordinate;
     }
 
     public ImageIcon getImage(){
         return image;
+    }
+
+    public int getPlantsValue(){
+        return plantsValue;
     }
 
     public Point getImageFirstPoint(){
@@ -81,5 +94,7 @@ public class Plants extends Projectile{
                 setActive(false);
         }
     }
+
+
 
 }
