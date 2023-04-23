@@ -29,6 +29,7 @@ public class Backyard {
         int[] a = {0,0,0};
         for(int i = 0; i < 5;i++)
             for(int j = 1; j < 10;j++)
+                // set a circle area in the rectangle are qualified to place plant
                 if ((e.getX()-columns[j])*(e.getX()-columns[j]) + (e.getY()-rows[i])*(e.getY()-rows[i]) <= 40*40){
                     a[0] = columns[j];
                     a[1] = rows[i];

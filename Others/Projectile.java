@@ -32,7 +32,4 @@ public class Projectile {
         return active;
     }
     
-    public void checkHit(){
-        
-    }
 }
