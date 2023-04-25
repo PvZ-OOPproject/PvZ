@@ -1,100 +1,26 @@
 package Plants;
 
-import java.awt.Point;
-
 import javax.swing.ImageIcon;
 
-import Others.Projectile;
-import Zombies.Zombies;
-
-public class Plants extends Projectile{
-    private int plantDamage;
-    private int plantHealth;
-    private int xCoordinate;
-    private int yCoordinate;
-    protected static int plantCount = 0;
-    public String name;
-    private int plantsValue;
+public class PeaShooter extends Plants{
+    private static int countPeaShooter;
+    //public ArrayList<Pea> peaList;
+    private Pea pea;
    
-    public ImageIcon image;
-    public int WIDTH;
-    public int HEIGHT;
-    public ImageIcon cardImage;
-    public Point imageCorner;
-    public Point imageFirstPoint;
-    public Point currentPoint;
-    public int check = 0;
-
-    public Plants(int plantDamage,int plantHealth,int x,int y,ImageIcon image,ImageIcon cardImage,String name,int plantsValue){
-        super(x,y,0,image.getIconWidth(),image.getIconHeight());
-        this.plantDamage = plantDamage;
-        this.plantHealth = plantHealth;
-        this.xCoordinate = x;
-        this.yCoordinate = y;
-        this.image = image;
-        this.cardImage = cardImage;
-        this.name = name;
-        this.imageCorner = new Point(x,y);
-        this.imageFirstPoint = new Point(x,y);
-        this.currentPoint = new Point(x,y);
-        this.WIDTH = cardImage.getIconWidth();
-        this.HEIGHT = cardImage.getIconHeight();
-        this.plantsValue = plantsValue;
-        plantCount++;
+    public PeaShooter(int plantDamage, int plantHealth,int x,int y,int xBackyard,int yBackyard) {
+        super(plantDamage, plantHealth,x,y,new ImageIcon("pea_shooter.gif"),new ImageIcon("pea_shooter_price.png"),"PeaShooter",100,xBackyard,yBackyard);
+        //peaList = new ArrayList<Pea>();
+        ImageIcon image = new ImageIcon("pea_shooter_price.png");
+        pea = new Pea(plantDamage, x, y,x + image.getIconWidth()/2,y + image.getIconHeight());
+        countPeaShooter++;
     }
 
-    public int getDamage(){
-        return plantDamage;
+    public int getCountNormal(){
+        return countPeaShooter;
     }
 
-    public int getHealth(){
-        return plantHealth;
+    public Pea getPea(){
+        return pea;
     }
-
-    public int getXCoordinate(){
-        return xCoordinate;
-    }
-
-    public void setXCoordinate(int x){
-        this.xCoordinate = x;
-    }
-
-    public void setYCoordinate(int y){
-        this.yCoordinate = y;
-    }
-
-    public int getYCoordinate(){
-        return yCoordinate;
-    }
-
-    public ImageIcon getImage(){
-        return image;
-    }
-
-    public int getPlantsValue(){
-        return plantsValue;
-    }
-
-    public Point getImageFirstPoint(){
-        return imageFirstPoint;
-    }
-
-    public String getName(){
-        return name;
-    }
-
-    public ImageIcon getCardImage(){
-        return cardImage;
-    }
-
-    public void plantHit(Zombies zombie){
-        if (isActive()){
-            plantHealth -= zombie.getDamage();
-            if (plantHealth <= 0)
-                setActive(false);
-        }
-    }
-
-
 
 }
