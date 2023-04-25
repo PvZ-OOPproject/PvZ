@@ -21,7 +21,7 @@ public class ObjectDrag {
     public static ArrayList<SunFlower> sunFlowerList;
     public static ArrayList<Sun> sunUpdateList;
     public static ArrayList<Sun> sunFallingUpdateList;
-    public static int sunValue = 100;
+    private int sunValue = 300;
     private int delaySunFalling = 400;
     Shovel shovel;
     Random random;
@@ -44,15 +44,15 @@ public class ObjectDrag {
             //int j = 2;
             switch(i){
                 case 1:{
-                    plantsCardList.add(new PeaShooter(4, 200, 80 + (i-1)*52, 5));
+                    plantsCardList.add(new PeaShooter(4, 200, 80 + (i-1)*52, 5,40,80 + 26 + (i-1)*52));
                     break; 
                 }
                 case 2:{
-                    plantsCardList.add(new SunFlower(0, 200, 80 + (i-1)*52, 5));
+                    plantsCardList.add(new SunFlower(0, 200, 80 + (i-1)*52, 5,40,80 + 26 + (i-1)*52));
                     break;                     
                 }
                 case 3:{
-                    plantsCardList.add(new walnut(500, 200, 100+random.nextInt(200), 100));
+                    plantsCardList.add(new walnut(500, 200, 100+random.nextInt(200), 100,40,80 + 26 + (i-1)*52));
                     break;                     
                 }                
             }
@@ -87,14 +87,14 @@ public class ObjectDrag {
                 i.cardImage.paintIcon(panel, g ,(int) i.imageCorner.getX(),(int) i.imageCorner.getY());
             else{
                 if (i.getName().equals("PeaShooter")){
-                    PeaShooter peaShooter = new PeaShooter(50, 200,(int) i.imageCorner.getX(),(int) i.imageCorner.getY());
+                    PeaShooter peaShooter = new PeaShooter(50, 200,(int) i.imageCorner.getX(),(int) i.imageCorner.getY(), (int) i.imageCorner.getX() + i.getImage().getIconWidth()/2,(int) i.imageCorner.getY() + i.getImage().getIconHeight());
                     //Pea pea = new Pea(50,peaShooter.getXCoordinate() , peaShooter.getYCoordinate());
                     //peaShooter.addPea(pea);
                     peaUpdateList.add(peaShooter.getPea());
                     plantsList.add(peaShooter);
                 }
                 else if (i.getName().equals("SunFlower")){
-                    SunFlower sunFlower = new SunFlower(0, 200, (int) i.imageCorner.getX(),(int) i.imageCorner.getY());
+                    SunFlower sunFlower = new SunFlower(0, 200, (int) i.imageCorner.getX(),(int) i.imageCorner.getY(), (int) i.imageCorner.getX() + i.getImage().getIconWidth()/2,(int) i.imageCorner.getY() + i.getImage().getIconHeight());
                     plantsList.add(sunFlower);
                     sunFlowerList.add(sunFlower);
                 }
@@ -107,8 +107,25 @@ public class ObjectDrag {
 
     }
 
+    public void updateShovel(Point point){
+        for(Plants i : plantsList){
+            if ( i.getXCoordinate() == point.getX() - i.getImage().getIconWidth()/2 && i.getYCoordinate() == point.getY() - i.getImage().getIconHeight()){
+                i.setActive(false);
+                for(Pea j : peaUpdateList){
+                    if ((int) i.getImageFirstPoint().getX() == j.getXFirstCoordinate() && (int) i.getImageFirstPoint().getY() == j.getYFirstCoordinate()){
+                        System.out.println(1);
+                        j.setStop(true);
+                        i.getImageFirstPoint().setLocation(-500, -500);
+                        break;
+                    }
+                }
+            }
+        }
+        
+    }
+
     public void drawShovel(GamePanel panel,Graphics g){
-        shovel.getImage().paintIcon(panel, g, shovel.getXCoordinate(),shovel.getYCoordinate());
+        shovel.getImage().paintIcon(panel, g,(int) shovel.getImageCorner().getX(),(int) shovel.getImageCorner().getY());
     }
 
     public void drawPlants(GamePanel panel,Graphics g){
@@ -129,6 +146,7 @@ public class ObjectDrag {
     public void updatePeaList(){
         for(Pea i : peaUpdateList){
             i.updatePea();
+
         }
     }
 
@@ -149,6 +167,14 @@ public class ObjectDrag {
                     break;
                 }
         }
+    }
+
+    public void reset(){
+        getPeaUpdateList().clear();
+        getPlantsList().clear();
+        getSunFallingList().clear();
+        getSunList().clear();
+        setSunValue(300);        
     }
 
     public void updateSunValue(int plantsValue){
@@ -185,6 +211,13 @@ public class ObjectDrag {
         return sunValue;
     }
 
+    public void setSunValue(int sunValue){
+        this.sunValue = sunValue;
+    }
+
+    public Shovel getShovel(){
+        return shovel;
+    }
 
 
 }
