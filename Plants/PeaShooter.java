@@ -7,10 +7,11 @@ public class PeaShooter extends Plants{
     //public ArrayList<Pea> peaList;
     private Pea pea;
    
-    public PeaShooter(int plantDamage, int plantHealth,int x,int y) {
-        super(plantDamage, plantHealth,x,y,new ImageIcon("pea_shooter.gif"),new ImageIcon("pea_shooter_price.png"),"PeaShooter",100);
+    public PeaShooter(int plantDamage, int plantHealth,int x,int y,int xBackyard,int yBackyard) {
+        super(plantDamage, plantHealth,x,y,new ImageIcon("pea_shooter.gif"),new ImageIcon("pea_shooter_price.png"),"PeaShooter",100,xBackyard,yBackyard);
         //peaList = new ArrayList<Pea>();
-        pea = new Pea(plantDamage, x, y);
+        ImageIcon image = new ImageIcon("pea_shooter_price.png");
+        pea = new Pea(plantDamage, x, y,x + image.getIconWidth()/2,y + image.getIconHeight());
         countPeaShooter++;
     }
 
