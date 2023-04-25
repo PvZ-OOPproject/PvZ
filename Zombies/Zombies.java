@@ -3,7 +3,6 @@ package Zombies;
 import javax.swing.ImageIcon;
 
 import Others.Projectile;
-import Plants.Pea;
 
 public class Zombies extends Projectile{
     private int zombieDamage;
@@ -11,12 +10,15 @@ public class Zombies extends Projectile{
     private int zombieHealth;
     private int xCoordinate;
     private int yCoordinate;
+
+    private int xBackyard;
+    private int yBackyard;
     private boolean stop = false;
     protected static boolean gameOver = false;
     protected static int zombieCount = 0;
     public ImageIcon image;
 
-    public Zombies(int zombieSpeed,int zombieHealth,int zombieDamage,int x,int y,ImageIcon image){
+    public Zombies(int zombieSpeed,int zombieHealth,int zombieDamage,int x,int y,ImageIcon image,int xBackyard,int yBackyard){
         super(x,y,zombieSpeed,image.getIconWidth(),image.getIconHeight());
         this.zombieSpeed = zombieSpeed;
         this.zombieHealth = zombieHealth;
@@ -25,6 +27,8 @@ public class Zombies extends Projectile{
         this.yCoordinate = y;
         this.image = image;
         zombieCount++;
+        this.xBackyard = xBackyard;
+        this.yBackyard = yBackyard;
     }
 
     public void updateXCoordinate(){
@@ -61,11 +65,9 @@ public class Zombies extends Projectile{
         return zombieDamage;
     }
 
-    public void zombieHit(Pea pea){
+    public void zombieHit(int damage){
         if (isActive()){
-            zombieHealth -= pea.getDamage();
-            if (zombieHealth <= 0)
-                setActive(false);
+            zombieHealth -= damage;
         }
     }
 
@@ -73,8 +75,14 @@ public class Zombies extends Projectile{
         this.stop = stop;
     }
 
-    public void checkGameOver(){
-        
+    public boolean checkGameOver(){
+        if (xCoordinate <= 150)
+            return true;
+        return false;
+    }
+
+    public int getYBackyard(){
+        return yBackyard;
     }
 
 
