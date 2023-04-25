@@ -9,38 +9,60 @@ public class Pea extends Projectile{
     private int speed;
     private int xCoordinate;
     private int xFirstCoordinate;
+    private int yFirstCoordinate;
     private int delay = 850;
     private int yCoordinate;
+    private boolean shootActive = false;
     private boolean stop = false;
     public static ImageIcon image = new ImageIcon("Pea.png");
     private static final int WIDTH = image.getIconWidth();
     private static final int HEIGHT = image.getIconHeight();
 
-    public Pea(int damage,int x,int y){
+    private int xBackyard;
+    private int yBackyard;    
+
+    public Pea(int damage,int x,int y,int xBackyard,int yBackyard){
         super(x,y,8,WIDTH,HEIGHT);
         this.damage = damage;
         this.xCoordinate = x;
         this.xFirstCoordinate = x;
+        this.yFirstCoordinate = y;
         this.yCoordinate = y;
         this.speed = 8;
+        this.xBackyard = xBackyard;
+        this.yBackyard = yBackyard;
     }
 
     public void updatePea() {
         if (!stop){
-            if (xCoordinate <= delay + xFirstCoordinate){
-                xCoordinate += speed;
-                this.updatePos();
-                //System.out.println(xCoordinate);
-                //System.out.println(this.getHitBox().getX());
+            if (isShootActive()){
+                if (xCoordinate < delay + xFirstCoordinate){
+                    xCoordinate += speed;
+                    this.updatePos();
+                }
+                else{
+                    setX(xFirstCoordinate);
+                    setPos(xFirstCoordinate, yCoordinate);
+                    setActive(true);
+                }
             }
             else{
-                setX(xFirstCoordinate);
-                setPos(xFirstCoordinate, yCoordinate);
-                setActive(true);
+                    if (xCoordinate > xFirstCoordinate && xCoordinate < delay + xFirstCoordinate){
+                        xCoordinate += speed;
+                        this.updatePos();
+                    }
+                    else{
+                        setX(xFirstCoordinate);
+                        setPos(xFirstCoordinate, yCoordinate);
+                        setActive(true);
+                    }
             }
+
+
         }
         else{
             setXFirstCoordinate(-200);
+            setPos(-200, yCoordinate);
             setActive(false);
         }
     }
@@ -73,6 +95,9 @@ public class Pea extends Projectile{
         return xFirstCoordinate;
     }
 
+    public int getYFirstCoordinate(){
+        return yFirstCoordinate;
+    }
     public void setXFirstCoordinate(int x){
         this.xFirstCoordinate = x;
     }
@@ -83,6 +108,18 @@ public class Pea extends Projectile{
 
     public boolean getStop(){
         return stop;
+    }
+
+    public boolean isShootActive(){
+        return shootActive;
+    }
+
+    public void setShootActive(boolean active){
+        this.shootActive = active;
+    }
+
+    public int getYBackyard(){
+        return yBackyard;
     }
 }
 
