@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 public class Card {
     private int[] columns;
     private int[] rows = {5,75};
+    
     public Card(){
         setColumnsCoordinates();
     }
