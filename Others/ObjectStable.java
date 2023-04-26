@@ -14,17 +14,17 @@ public class ObjectStable {
     public static ArrayList<Zombies> zombiesList;
     public static ArrayList<LawnMower> lawnMowersList;
     public static ArrayList<Plants> removeList;
-    public static boolean gameOver = false;
-    private int numZombies;
+    public boolean gameOver = false;
+    public boolean gameWin = false;
+    private int delayZombies = 0;
     Random random;
     
-    public ObjectStable(int numZombies){
-        this.numZombies = numZombies; 
+    public ObjectStable(){ 
         zombiesList = new ArrayList<Zombies>();
         lawnMowersList = new ArrayList<LawnMower>();
         removeList = new ArrayList<>();
         random = new Random();
-        updateZombiesBackyard();
+        //updateZombiesBackyard();
         updateLawnMowerBackyard();
         //updateTestZombies(1, 16);
     }
@@ -35,7 +35,7 @@ public class ObjectStable {
     }
 
     //update zombies in this round
-    public void updateZombiesBackyard(){
+    /*public void updateZombiesBackyard(){
         for(int i=0; i < numZombies;i++){
             //int j = random.nextInt(4);
             int j = 1;
@@ -50,10 +50,126 @@ public class ObjectStable {
                 }
             }
         }
+    }*/
+    
+    public void zombiesListName(int i,int j,int z){
+        switch(j){
+            case 0:{
+                zombiesList.add(new Zombie_normal(-1, 200, 1200 + z*50, i*100,1000, 130 + i*100));
+                break;
+            }
+            case 1:{
+                zombiesList.add(new Zombie_normal(-1, 200, 1200 + z*50, i*100,1000, 130 + i*100));
+                break;
+            }
+            case 2:{
+                zombiesList.add(new Zombie_normal(-1, 200, 1200 + z*50, i*100,1000, 130 + i*100));
+                break;
+            }                
+        }
     }
 
-    /*public void updateTestZombies(int turn,int numZombies){
-        int n = 16;
+    public void addTurnZombies(int numBegin,int numEnd,int typeBegin,int typeEnd){
+        int k = numBegin + random.nextInt(numEnd - numBegin + 1);
+        int z = 0;
+        while (z < k){
+            int i = random.nextInt(5);
+            int j = typeBegin + random.nextInt(typeEnd - typeBegin + 1);
+            zombiesListName(i, j,0);
+            z++;
+        }
+    }
+    public void addFinalZombies(int num){      
+        int a = num/5;
+        int b = num % 5;
+        int[] list1 = {a,a,a,a,a};
+
+        for(int i = 0; i < b;i++)
+            list1[i]++;
+        
+        int[] list2 = {-1,-1,-1,-1,-1};
+        for(int i = 0;i < 5;i++){
+            while(true){
+                int j = random.nextInt(5);
+                if (list2[j] == -1){
+                    list2[j] = list1[i];
+                    break;
+                }
+            }
+        }
+        int limit = 3;
+        int count = 0;
+        int test;
+        if (b == 0)
+            test = a;
+        else
+            test = a + 1;
+        for(int k = 0; k < test;k++){
+            for(int i = 0; i < 5;i++){
+                if (k < list2[i]){                    
+                    if (count < limit){
+                        zombiesListName(i, count,k);
+                        count++;
+                    }
+                    else{
+                        int j = random.nextInt(limit);
+                        zombiesListName(i,j,k);
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    public boolean readyToAddZombies(){        
+        for(Zombies i : zombiesList){
+            if (i.getHealth() <= (int) i.getFirstHealth()/2 && i.getCheck() == 0){
+                for(Zombies j : zombiesList){
+                    j.setCheck(1);
+                }
+                return true; 
+            }
+        }
+        return false;
+    }
+
+    public boolean checkFinal(){
+        for(Zombies i : zombiesList){
+            if (i.getHealth() > 0){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void updateTestZombies(int turn,int numTurn,int numFinal){
+        if (zombiesList.size() < numTurn){
+            if ( delayZombies < 400){
+                delayZombies += 2;
+            }
+            else{
+                if (zombiesList.size() == 0){
+                    addTurnZombies(1,1, 0, 2);
+                }
+                else{
+                    if (readyToAddZombies())
+                        addTurnZombies(1,2, 0, 2);
+                }
+            }
+        }
+        else{
+            if (checkFinal() && gameWin == false){
+                addFinalZombies(numFinal);
+                gameWin = true;
+            }
+        }
+        //System.out.println(zombiesList.size());
+
+        
+        
+        
+        /*int n = 16;
         int a = 3 + random.nextInt(2);
         int b = 2 + random.nextInt(3);
         int c = 2 + random.nextInt(2);
@@ -70,7 +186,7 @@ public class ObjectStable {
         for(int i = 0; i < 5;i++){
             for(int j = 0; j < list[i];j++){
                 int z = random.nextInt(3);
-                switch(z){
+                /*switch(z){
                     case 0:{
                         zombiesList.add(new Zombie_normal(-1, 200, 1000 + j*50, i*100));
                         break;
@@ -85,13 +201,13 @@ public class ObjectStable {
                     }
                 }
             }
-        }
+        }*/
         
-    }*/
+    }
 
     public void updateLawnMowerBackyard(){
         for(int i = 0; i < 5;i++){
-            lawnMowersList.add(new LawnMower(210, 130 + i*100));
+            lawnMowersList.add(new LawnMower(210, 130 + i*100,210,130 + i*100));
         }
     }
 
@@ -104,7 +220,7 @@ public class ObjectStable {
     //draw zombie in the screen
     public void drawZombies(GamePanel panel,Graphics g){
         for(Zombies i : zombiesList){
-            if (i.isActive())
+            if (i.isImageActive())
             //g2D.drawImage(i.getImage(), x, i.getYCoordinate(), null);
                 i.image.paintIcon(panel, g, i.getXCoordinate(),i.getYCoordinate());
                 //indexList.add(zombiesList.indexOf(i);
@@ -125,19 +241,18 @@ public class ObjectStable {
 
     public void checkCollision(ArrayList<Plants> plantsList, ArrayList<Pea> peaUpdateList){
         for(Pea i : peaUpdateList){
-            if (checkZombiesLine(zombiesList,i.getXFirstCoordinate() ,i.getYBackyard())){
+            if (checkZombiesLine(zombiesList,i.getXFirstCoordinate() ,i.getYBackyard()) && !i.getPrepareStop()){
                 i.setShootActive(true);
             }            
             else
                 i.setShootActive(false);
-            
         }
 
         for(Zombies i : zombiesList){
             if (checkInteract(plantsList, i))
-                i.setStop(true);
+                i.setStopMotion(true);
             else
-                i.setStop(false);
+                i.setStopMotion(false);
         }
         
         for(Zombies i : zombiesList){
@@ -145,10 +260,10 @@ public class ObjectStable {
             //Rectangle2D.Float r = i.getHitBox();
                 for(Plants j : plantsList){
                     if (i.getHitBox().intersects(j.getHitBox())){
-                        if (j.isActive()){
-                            j.plantHit(i);
+                        if (j.isImageActive()){
+                            j.plantHit(i.getDamage());
                             if (j.getHealth() <= 0){
-                                j.setActive(false);
+                                j.setImageActive(false);
                             }
                             //i.setStop(true);
                         }
@@ -157,32 +272,32 @@ public class ObjectStable {
                             removeList.add(j);
                             }
                         }
-                    /*else
-                        i.setStop(false);*/
-                    //System.out.println(removeList.size());
                 }
                 for(Pea k : peaUpdateList){
                     for(Plants m : removeList){
-                        if ((int) m.getImageFirstPoint().getX() == k.getXFirstCoordinate() && (int) m.getImageFirstPoint().getY() == k.getYFirstCoordinate()){
+                        //if ((int) m.getImageFirstPoint().getX() == k.getXFirstCoordinate() && (int) m.getImageFirstPoint().getY() == k.getYFirstCoordinate()){
+                        if (m.getXBackyard() == k.getXBackyard() && m.getYBackyard() == k.getYBackyard()){ 
                             k.setStop(true);
-                            m.getImageFirstPoint().setLocation(-500, -500);
+                            //m.getImageFirstPoint().setLocation(-500, -500);
                         }
                     }
                     if (i.getHitBox().intersects(k.getHitBox())){
-                        if (k.isActive()){
+                        if (k.isImageActive()){
                             i.zombieHit(k.getDamage());
-                            k.setActive(false);
+                            k.setImageActive(false);
                             if (i.getHealth() <= 0){
-                                i.setActive(false);
+                                i.setImageActive(false);
                             }
                         }
                     }
                 }
                 for(LawnMower n: lawnMowersList){
-                    if (i.getHitBox().intersects(n.getHitBox())){
-                        n.setActive(false);
-                        i.setActive(false);
-                    }
+                    if (n.getYBackyard() == i.getYBackyard())
+                        if (i.getHitBox().intersects(n.getHitBox())){
+                            i.setHealth(0);
+                            n.setImageActive(false);
+                            i.setImageActive(false);
+                        }
                 }
                 if (i.checkGameOver())
                     gameOver = true;
@@ -193,26 +308,17 @@ public class ObjectStable {
 
     public boolean checkZombiesLine(ArrayList<Zombies> zombiesList,int x,int y){
         for(Zombies i : zombiesList){
-            if (Math.abs(i.getYBackyard() - y) <= 10 && i.getXCoordinate() <= 1000){
+            if (i.getYBackyard() == y && i.getXCoordinate() <= 1000){
                 if (x < i.getXCoordinate())
                     return true; 
             }
         }
         return false;
     }
-
-    public boolean checkZombiesFront(int x){
-        for(Zombies i : zombiesList){
-            if (x < i.getXCoordinate()){
-                return true; 
-            }
-        }
-        return false; 
-    }
     
     public void reset(){
         zombiesList.clear();
-        updateZombiesBackyard();
+        //updateZombiesBackyard();
         lawnMowersList.clear();
         updateLawnMowerBackyard();
         gameOver = false;
@@ -248,8 +354,9 @@ public class ObjectStable {
 
     public boolean checkInteract(ArrayList<Plants> plantsList,Zombies j){
         for(Plants i : plantsList){
-            if (j.getHitBox().intersects(i.getHitBox()))
-                return true;
+            if (i.getYBackyard() == j.getYBackyard())
+                if (j.getHitBox().intersects(i.getHitBox()))
+                    return true;
         }
         return false;
     }
