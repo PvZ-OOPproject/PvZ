@@ -12,7 +12,7 @@ import Plants.PeaShooter;
 import Plants.Plants;
 import Plants.Sun;
 import Plants.SunFlower;
-import Plants.walnut;
+import Plants.Walnut;
 
 public class ObjectDrag {
     public static ArrayList<Plants> plantsCardList;
@@ -52,7 +52,7 @@ public class ObjectDrag {
                     break;                     
                 }
                 case 3:{
-                    plantsCardList.add(new walnut(500, 200, 100+random.nextInt(200), 100,40,80 + 26 + (i-1)*52));
+                    plantsCardList.add(new Walnut(500, 200, 100+random.nextInt(200), 100,40,80 + 26 + (i-1)*52));
                     break;                     
                 }                
             }
@@ -69,7 +69,7 @@ public class ObjectDrag {
             delaySunFalling = 0;
         }
         for(Sun i : sunFallingUpdateList){
-            if (i.isActive())
+            if (i.isImageActive())
                 if (i.getYCoordinate() <= i.getYFirstCoordinate() + 580)
                     i.setYCoordinate(i.getYCoordinate() + 2);
         }
@@ -84,22 +84,29 @@ public class ObjectDrag {
     public void drawPlantsCard(GamePanel panel,Graphics g){
         for(Plants i : plantsCardList){
             if (i.check == 0)
-                i.cardImage.paintIcon(panel, g ,(int) i.imageCorner.getX(),(int) i.imageCorner.getY());
+                if (!i.getCheckDelay())
+                    i.cardImage.paintIcon(panel, g ,(int) i.getImageCorner().getX(),(int) i.getImageCorner().getY());
+                else{
+                    i.getImageDelay().paintIcon(panel, g ,(int) i.getImageCorner().getX(),(int) i.getImageCorner().getY());
+                    i.setDelay(i.getDelay()+1);
+                    if (i.getDelay() == i.getConstDelay()){
+                        i.setCheckDelay(false);
+                        i.setDelay(0);
+                    }
+                }
             else{
                 if (i.getName().equals("PeaShooter")){
-                    PeaShooter peaShooter = new PeaShooter(50, 200,(int) i.imageCorner.getX(),(int) i.imageCorner.getY(), (int) i.imageCorner.getX() + i.getImage().getIconWidth()/2,(int) i.imageCorner.getY() + i.getImage().getIconHeight());
-                    //Pea pea = new Pea(50,peaShooter.getXCoordinate() , peaShooter.getYCoordinate());
-                    //peaShooter.addPea(pea);
+                    PeaShooter peaShooter = new PeaShooter(50, 200,(int) i.getImageCorner().getX(),(int) i.getImageCorner().getY(), i.getXBackyard(),i.getYBackyard());
                     peaUpdateList.add(peaShooter.getPea());
                     plantsList.add(peaShooter);
                 }
                 else if (i.getName().equals("SunFlower")){
-                    SunFlower sunFlower = new SunFlower(0, 200, (int) i.imageCorner.getX(),(int) i.imageCorner.getY(), (int) i.imageCorner.getX() + i.getImage().getIconWidth()/2,(int) i.imageCorner.getY() + i.getImage().getIconHeight());
+                    SunFlower sunFlower = new SunFlower(0, 200, (int) i.getImageCorner().getX(),(int) i.getImageCorner().getY(), i.getXBackyard(),i.getYBackyard());
                     plantsList.add(sunFlower);
                     sunFlowerList.add(sunFlower);
                 }
-                i.currentPoint = new Point((int)i.imageCorner.getX(),(int)i.imageCorner.getY());
-                i.imageCorner = new Point((int)i.imageFirstPoint.getX(),(int)i.imageFirstPoint.getY());
+                i.currentPoint = new Point((int)i.getImageCorner().getX(),(int)i.getImageCorner().getY());
+                i.setImageCorner(new Point((int)i.imageFirstPoint.getX(),(int)i.imageFirstPoint.getY()));
                 i.check--;
             }
 
@@ -109,14 +116,18 @@ public class ObjectDrag {
 
     public void updateShovel(Point point){
         for(Plants i : plantsList){
-            if ( i.getXCoordinate() == point.getX() - i.getImage().getIconWidth()/2 && i.getYCoordinate() == point.getY() - i.getImage().getIconHeight()){
-                i.setActive(false);
+            if ( i.getXBackyard() == point.getX() && i.getYBackyard() == point.getY()){
+                i.setImageActive(false);
                 for(Pea j : peaUpdateList){
-                    if ((int) i.getImageFirstPoint().getX() == j.getXFirstCoordinate() && (int) i.getImageFirstPoint().getY() == j.getYFirstCoordinate()){
-                        System.out.println(1);
-                        j.setStop(true);
-                        i.getImageFirstPoint().setLocation(-500, -500);
-                        break;
+                    //if ((int) i.getImageFirstPoint().getX() == j.getXFirstCoordinate() && (int) i.getImageFirstPoint().getY() == j.getYFirstCoordinate()){
+                        if (i.getXBackyard() == j.getXBackyard() && i.getYBackyard() == j.getYBackyard()){
+                            if (!j.getStop()){
+                                j.setShootActive(false);
+                                j.setPrepareStop(true);
+                                //j.setStop(true);
+                                //i.getImageFirstPoint().setLocation(-500, -500);
+                                break;
+                            }
                     }
                 }
             }
@@ -130,7 +141,7 @@ public class ObjectDrag {
 
     public void drawPlants(GamePanel panel,Graphics g){
         for(Plants j : plantsList){
-            if (j.isActive())
+            if (j.isImageActive())
                 j.image.paintIcon(panel, g ,(int) j.currentPoint.getX(),(int) j.currentPoint.getY());
         }
     }
@@ -138,15 +149,15 @@ public class ObjectDrag {
     public void drawPeaList(GamePanel panel,Graphics g){
         for(Pea i : peaUpdateList){
             if (!i.getStop())
-                if (i.isActive())
-                    i.getImage().paintIcon(panel,g,i.getX(),(int) i.getY());
+                if (i.isImageActive())
+                    if (i.getXCoordinate() > i.getXFirstCoordinate())
+                        i.getImage().paintIcon(panel,g,i.getXCoordinate(),(int) i.getYCoordinate());
         }        
     }
 
     public void updatePeaList(){
         for(Pea i : peaUpdateList){
             i.updatePea();
-
         }
     }
 
@@ -159,11 +170,11 @@ public class ObjectDrag {
     public void updateSunCard(MouseEvent e,ArrayList<Sun> sunList){
         for(Sun i : sunList){
             if (i.getYCoordinate() >= 80)
-                if (Math.abs((int) i.getXCoordinate()-e.getPoint().getX()) <= i.getImage().getIconWidth() && Math.abs((int) i.getYCoordinate()-e.getPoint().getY()) <= i.getImage().getIconHeight()){
-                    i.setXCoordinate(0);
-                    i.setYCoordinate(0);
+                if (Math.abs((int) i.getXCoordinate()-e.getPoint().getX()) <= i.getImage().getIconWidth()*1.5 && Math.abs((int) i.getYCoordinate()-e.getPoint().getY()) <= i.getImage().getIconHeight()*1.5){
+                    i.setXCoordinate(15);
+                    i.setYCoordinate(10);
                     sunValue += 50;
-                    i.setActive(false);
+                    i.setImageActive(false);
                     break;
                 }
         }
