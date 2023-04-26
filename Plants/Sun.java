@@ -11,7 +11,7 @@ public class Sun extends Projectile {
     private static ImageIcon image = new ImageIcon("sun.gif");
 
     public Sun(int x, int y){
-        super(x,y,0,image.getIconWidth(),image.getIconHeight());
+        super(x,y,0,image.getIconWidth(),image.getIconHeight(),0,0);
         this.xCoordinate = x;
         this.yCoordinate = y + 40;
         this.yFirstCoordinate = y + 40;
