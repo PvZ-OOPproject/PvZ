@@ -6,51 +6,36 @@ import Others.Projectile;
 
 public class Zombies extends Projectile{
     private int zombieDamage;
-    private int zombieSpeed;
     private int zombieHealth;
-    private int xCoordinate;
-    private int yCoordinate;
 
-    private int xBackyard;
-    private int yBackyard;
-    private boolean stop = false;
+    private int zombieFirstHealth;
+
+    private int check = 0;
+
+    private boolean stopMotion = false;
     protected static boolean gameOver = false;
-    protected static int zombieCount = 0;
     public ImageIcon image;
 
     public Zombies(int zombieSpeed,int zombieHealth,int zombieDamage,int x,int y,ImageIcon image,int xBackyard,int yBackyard){
-        super(x,y,zombieSpeed,image.getIconWidth(),image.getIconHeight());
-        this.zombieSpeed = zombieSpeed;
+        super(x,y,zombieSpeed,image.getIconWidth(),image.getIconHeight(),xBackyard,yBackyard);
         this.zombieHealth = zombieHealth;
         this.zombieDamage = zombieDamage;
-        this.xCoordinate = x;
-        this.yCoordinate = y;
         this.image = image;
-        zombieCount++;
-        this.xBackyard = xBackyard;
-        this.yBackyard = yBackyard;
+        this.zombieFirstHealth = zombieHealth;
     }
 
     public void updateXCoordinate(){
-        if (isActive()){
-            if (!stop){
-                this.xCoordinate += zombieSpeed;
+        if (isImageActive()){
+            if (!stopMotion){
+                setXCoordinate(getXCoordinate() + getSpeed());
                 this.updatePos();
             }
         }
         else
             {
-                xCoordinate = 3000;
-                setPos(xCoordinate, yCoordinate);
+                setXCoordinate(3000);
+                setPos(getXCoordinate(), getYCoordinate());
             }
-    }
-
-    public int getXCoordinate(){
-        return xCoordinate;
-    }
-
-    public int getYCoordinate(){
-        return yCoordinate;
     }
 
     public ImageIcon getImage(){
@@ -66,24 +51,34 @@ public class Zombies extends Projectile{
     }
 
     public void zombieHit(int damage){
-        if (isActive()){
+        if (isImageActive()){
             zombieHealth -= damage;
         }
     }
 
-    public void setStop(boolean stop){
-        this.stop = stop;
+    public void setStopMotion(boolean stop){
+        this.stopMotion = stop;
     }
 
     public boolean checkGameOver(){
-        if (xCoordinate <= 150)
+        if (getXCoordinate() <= 150)
             return true;
         return false;
     }
 
-    public int getYBackyard(){
-        return yBackyard;
+    public int getCheck(){
+        return check;
     }
 
+    public void setCheck(int check){
+        this.check = check;
+    }
 
+    public int getFirstHealth(){
+        return zombieFirstHealth;
+    }
+
+    public void setHealth(int health){
+        this.zombieHealth = health;
+    }
 }
