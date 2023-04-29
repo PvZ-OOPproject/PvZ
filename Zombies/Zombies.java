@@ -7,6 +7,8 @@ import Others.Projectile;
 public class Zombies extends Projectile{
     private int zombieDamage;
     private int zombieHealth;
+    private int zombieFirstSpeed;
+    private int effectedZombieDelay = 0;
 
     private int zombieFirstHealth;
 
@@ -22,9 +24,16 @@ public class Zombies extends Projectile{
         this.zombieDamage = zombieDamage;
         this.image = image;
         this.zombieFirstHealth = zombieHealth;
+        this.zombieFirstSpeed = zombieSpeed;
     }
 
     public void updateXCoordinate(){
+        effectedZombieDelay++;
+        if (effectedZombieDelay == 400){
+            setEffectedZombieDelay(0);
+            setSpeed(zombieFirstSpeed);
+        }
+
         if (isImageActive()){
             if (!stopMotion){
                 setXCoordinate(getXCoordinate() + getSpeed());
@@ -81,4 +90,16 @@ public class Zombies extends Projectile{
     public void setHealth(int health){
         this.zombieHealth = health;
     }
+
+    public int getFirstSpeed(){
+        return zombieFirstSpeed;
+    }
+
+    public int getEffectedZombieDelay(){
+        return effectedZombieDelay;
+    }
+
+    public void setEffectedZombieDelay(int delay){
+        this.effectedZombieDelay = delay;
+    }    
 }

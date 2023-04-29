@@ -55,15 +55,15 @@ public class ObjectStable {
     public void zombiesListName(int i,int j,int z){
         switch(j){
             case 0:{
-                zombiesList.add(new Zombie_normal(-1, 200, 1200 + z*50, i*100,1000, 130 + i*100));
+                zombiesList.add(new Zombie_normal(-2, 200, 1200 + z*50, i*100,1000, 130 + i*100));
                 break;
             }
             case 1:{
-                zombiesList.add(new Zombie_normal(-1, 200, 1200 + z*50, i*100,1000, 130 + i*100));
+                zombiesList.add(new Zombie_normal(-2, 200, 1200 + z*50, i*100,1000, 130 + i*100));
                 break;
             }
             case 2:{
-                zombiesList.add(new Zombie_normal(-1, 200, 1200 + z*50, i*100,1000, 130 + i*100));
+                zombiesList.add(new Zombie_normal(-2, 200, 1200 + z*50, i*100,1000, 130 + i*100));
                 break;
             }                
         }
@@ -283,8 +283,9 @@ public class ObjectStable {
                     }
                     if (i.getHitBox().intersects(k.getHitBox())){
                         if (k.isImageActive()){
-                            i.zombieHit(k.getDamage());
-                            k.setImageActive(false);
+                            //i.zombieHit(k.getDamage());
+                            //k.setImageActive(false);
+                            k.effectOnZombies(i);
                             if (i.getHealth() <= 0){
                                 i.setImageActive(false);
                             }

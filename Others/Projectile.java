@@ -5,7 +5,9 @@ import java.awt.geom.Rectangle2D;
 public class Projectile {
     private Rectangle2D.Float hitBox;
     private boolean imageActive = true;
+    
     private int speed;
+    
     private int xBackyard;
     private int yBackyard;
     private int xCoordinate;
@@ -25,6 +27,10 @@ public class Projectile {
 
     public int getSpeed(){
         return speed;
+    }
+
+    public void setSpeed(int speed){
+        this.speed = speed;
     }
 
     public void setPos(int x,int y){

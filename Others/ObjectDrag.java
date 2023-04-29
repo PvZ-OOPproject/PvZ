@@ -7,6 +7,8 @@ import java.util.Random;
 
 
 import Control.GamePanel;
+import Plants.DoublePeaShooter;
+import Plants.IcePeaShooter;
 import Plants.Pea;
 import Plants.PeaShooter;
 import Plants.Plants;
@@ -39,7 +41,7 @@ public class ObjectDrag {
     }
 
     public void update(){
-        for(int i=1; i < 3;i++){
+        for(int i=1; i <= 5;i++){
             //int j = random.nextInt(4);
             //int j = 2;
             switch(i){
@@ -52,9 +54,17 @@ public class ObjectDrag {
                     break;                     
                 }
                 case 3:{
-                    plantsCardList.add(new Walnut(500, 200, 100+random.nextInt(200), 100,40,80 + 26 + (i-1)*52));
+                    plantsCardList.add(new Walnut(500, 200, 80 + (i-1)*52, 5,40,80 + 26 + (i-1)*52));
                     break;                     
-                }                
+                }
+                case 4:{
+                    plantsCardList.add(new DoublePeaShooter(4, 200, 80 + (i-1)*52, 5,40,80 + 26 + (i-1)*52));
+                    break;                    
+                }
+                case 5:{
+                    plantsCardList.add(new IcePeaShooter(4, 200, 80 + (i-1)*52, 5,40,80 + 26 + (i-1)*52));
+                    break;                   
+                }
             }
         }
     }
@@ -105,6 +115,22 @@ public class ObjectDrag {
                     plantsList.add(sunFlower);
                     sunFlowerList.add(sunFlower);
                 }
+                else if (i.getName().equals("DoublePeaShooter")){
+                    DoublePeaShooter doublePeaShooter = new DoublePeaShooter(50, 200,(int) i.getImageCorner().getX(),(int) i.getImageCorner().getY(), i.getXBackyard(),i.getYBackyard());
+                    peaUpdateList.add(doublePeaShooter.getPea1());
+                    peaUpdateList.add(doublePeaShooter.getPea2());
+                    plantsList.add(doublePeaShooter);
+                }
+                else if (i.getName().equals("Walnut")){
+                    Walnut walnut = new Walnut(0, 500,(int) i.getImageCorner().getX(),(int) i.getImageCorner().getY(), i.getXBackyard(),i.getYBackyard());
+                    plantsList.add(walnut);
+                }
+                else if (i.getName().equals("IcePeaShooter")){
+                    IcePeaShooter icePeaShooter = new IcePeaShooter(50, 200,(int) i.getImageCorner().getX(),(int) i.getImageCorner().getY(), i.getXBackyard(),i.getYBackyard());
+                    peaUpdateList.add(icePeaShooter.getPea());
+                    plantsList.add(icePeaShooter);
+                }
+
                 i.currentPoint = new Point((int)i.getImageCorner().getX(),(int)i.getImageCorner().getY());
                 i.setImageCorner(new Point((int)i.imageFirstPoint.getX(),(int)i.imageFirstPoint.getY()));
                 i.check--;
