@@ -48,6 +48,7 @@ public class GamePanel extends JPanel implements ActionListener,Runnable{
         
         // declare object
         objectDrag = new ObjectDrag(); // list of object can be controlled by mouse
+
         object = new ObjectStable(); // list of object that are stable in game (such as zombie)
         backyard = new Backyard(); // contains the coordinate of every position in the backyard
         card = new Card(); // contains card price of plants
@@ -117,6 +118,7 @@ public class GamePanel extends JPanel implements ActionListener,Runnable{
         g2D.drawLine(80,0,80,600);
         g2D.drawLine(440,0,440,600);
         g2D.drawLine(0,75,1066,75);
+
 
 
         objectDrag.drawPlantsCard(this,g); //draw plants card
@@ -201,6 +203,7 @@ public class GamePanel extends JPanel implements ActionListener,Runnable{
                 prePt = e.getPoint();
                 if (card.qualifiedPositionCard(e)[1] == 1 && check1 == 0){ //check the mouse can click the card properly
                     if (objectDrag.getSunValue() >= objectDrag.getPlantsCardList().get(card.qualifiedPositionCard(e)[0]).getPlantsValue()){
+
                         if (!objectDrag.getPlantsCardList().get(card.qualifiedPositionCard(e)[0]).getCheckDelay()){
                             check2 = card.qualifiedPositionCard(e)[0]; //get position of the specific card in the card list
                             check1++; //purpose: to make sure to click only 1 card
@@ -216,7 +219,9 @@ public class GamePanel extends JPanel implements ActionListener,Runnable{
             if (!object.checkGameOver()){
                 if (check2 >= 0 && check2 < 8){
                     if (backyard.qualifiedPositionBackyard(e)[2] != 1){ //check the mouse are placed in the proper area to place the plants in the backyard
+
                         objectDrag.getPlantsCardList().get(check2).setImageCorner(new Point((int)ObjectDrag.plantsCardList.get(check2).imageFirstPoint.getX(),(int)ObjectDrag.plantsCardList.get(check2).imageFirstPoint.getY()));
+
                         // a card is forced to move back to card list because the mouse place in area improperly to place plants 
                     }
                     else{
@@ -225,6 +230,7 @@ public class GamePanel extends JPanel implements ActionListener,Runnable{
                             int a = objectDrag.getPlantsCardList().get(check2).getImage().getIconWidth();
                             int b = objectDrag.getPlantsCardList().get(check2).getImage().getIconHeight();
                             // get coordinate to place the plants
+
                             objectDrag.getPlantsCardList().get(check2).setImageCorner(new Point(backyard.qualifiedPositionBackyard(e)[0]-a/2,backyard.qualifiedPositionBackyard(e)[1]-b));
                             objectDrag.getPlantsCardList().get(check2).setXBackyard(backyard.qualifiedPositionBackyard(e)[0]);
                             objectDrag.getPlantsCardList().get(check2).setYBackyard(backyard.qualifiedPositionBackyard(e)[1]);
@@ -236,6 +242,7 @@ public class GamePanel extends JPanel implements ActionListener,Runnable{
                         }
                         else
                             objectDrag.getPlantsCardList().get(check2).setImageCorner(new Point((int)ObjectDrag.plantsCardList.get(check2).imageFirstPoint.getX(),(int)ObjectDrag.plantsCardList.get(check2).imageFirstPoint.getY()));
+
                     }
                 }
                 else if (check2 == 8){
@@ -262,7 +269,9 @@ public class GamePanel extends JPanel implements ActionListener,Runnable{
                     //if (objectDrag.getSunValue() >= objectDrag.getPlantsList().get(check2).getPlantsValue()){
                     Point currentPt = e.getPoint();
                     // get new coordinate by using displacement between the current and the previous mouse
+
                     objectDrag.getPlantsCardList().get(check2).getImageCorner().translate((int)(currentPt.getX()-prePt.getX()),(int)(currentPt.getY()-prePt.getY()));
+
                     prePt = currentPt;
                     repaint(); //repaint in a loop of game
                 
@@ -270,7 +279,9 @@ public class GamePanel extends JPanel implements ActionListener,Runnable{
                 else if (check2 == 8){
                     Point currentPt = e.getPoint();
                     // get new coordinate by using displacement between the current and the previous mouse
+
                     objectDrag.getShovel().getImageCorner().translate((int)(currentPt.getX()-prePt.getX()),(int)(currentPt.getY()-prePt.getY()));
+
                     prePt = currentPt;
                     repaint(); //repaint in a loop of game
                 }
@@ -295,6 +306,7 @@ public class GamePanel extends JPanel implements ActionListener,Runnable{
             objectDrag.updateSunList();
             objectDrag.updateSunFalling();
             object.setAvailableCoordinate(backyard);
+
             object.updateTestZombies(1, 15,15);
         }
     }

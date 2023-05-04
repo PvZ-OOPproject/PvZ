@@ -7,6 +7,7 @@ public class LawnMower extends Projectile{
     private static final int WIDTH = image.getIconWidth();
     private static final int HEIGHT = image.getIconHeight();
 
+
     public LawnMower(int x,int y,int xBackyard,int yBackyard){
         super(x - WIDTH/2,y - HEIGHT/2,10,WIDTH,HEIGHT,xBackyard,yBackyard);
     }
@@ -20,11 +21,13 @@ public class LawnMower extends Projectile{
             else
                 setPos(0, getYCoordinate());
 
+
         }
     }
 
     public ImageIcon getImage(){
         return image;
     }
+
 
 }

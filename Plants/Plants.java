@@ -13,10 +13,12 @@ public class Plants extends Projectile{
     public String name;
     private int plantsValue;
    
+
     private boolean checkDelay = false;
     private int constDelay;
     private int delay = 0;
     private ImageIcon imageDelay;
+
 
     public ImageIcon image;
     public int WIDTH;
@@ -26,6 +28,7 @@ public class Plants extends Projectile{
     public Point imageFirstPoint;
     public Point currentPoint;
     public int check = 0;
+
 
     public Plants(int plantDamage,int plantHealth,int x,int y,ImageIcon image,ImageIcon cardImage,String name,int plantsValue,int xBackyard,int yBackyard,ImageIcon imageDelay,int constDelay){
         super(x,y,0,image.getIconWidth(),image.getIconHeight(),xBackyard,yBackyard);
@@ -37,6 +40,7 @@ public class Plants extends Projectile{
         this.imageCorner = new Point(x,y);
         this.imageFirstPoint = new Point(x,y);
         this.currentPoint = new Point(x,y);
+
         this.plantsValue = plantsValue;
         this.imageDelay = imageDelay;
         this.constDelay = constDelay;

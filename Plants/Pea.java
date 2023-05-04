@@ -21,16 +21,19 @@ public class Pea extends Projectile{
 
     public Pea(int damage,int x,int y,int xBackyard,int yBackyard,ImageIcon image,String name){
         super(x,y,8,image.getIconWidth(),image.getIconHeight(),xBackyard,yBackyard);
+
         this.damage = damage;
         this.xFirstCoordinate = x;
         this.yFirstCoordinate = y;
         this.image = image;
         this.name = name;
+
     }
 
     public void updatePea() {
         if (!stop){
             if (isShootActive()){
+
                 if (getXCoordinate() < delay + xFirstCoordinate){
                     setXCoordinate(getXCoordinate() + getSpeed());
                     this.updatePos();
@@ -53,6 +56,7 @@ public class Pea extends Projectile{
                             setImageActive(true);
                         else
                             setStop(true);
+
                     }
             }
 
@@ -60,8 +64,10 @@ public class Pea extends Projectile{
         }
         else{
             setXFirstCoordinate(-200);
+
             setPos(-200, getYCoordinate());
             setImageActive(false);
+
         }
     }
 
@@ -121,6 +127,7 @@ public class Pea extends Projectile{
     public boolean getPrepareStop(){
         return prepareStop;
     }
+
 
 }
 

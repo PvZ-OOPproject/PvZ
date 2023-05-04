@@ -11,6 +11,7 @@ public class SunFlower extends Plants{
    
     public SunFlower(int plantDamage, int plantHealth,int x,int y,int xBackyard,int yBackyard) {
         super(plantDamage, plantHealth,x,y,new ImageIcon("sun_flower.gif"),new ImageIcon("sun_flower_price.png"),"SunFlower",50,xBackyard,yBackyard,new ImageIcon("sun_flower_price.png"),250);
+
         countSunFlower++;
     }
 

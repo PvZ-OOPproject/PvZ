@@ -1,5 +1,8 @@
 package Control;
 
+import java.awt.Color;
+import java.awt.Font;
+
 import javax.swing.*;
 
 public class GameFrame extends JFrame {
@@ -25,6 +28,7 @@ public class GameFrame extends JFrame {
         String sunValue = String.valueOf(panel.getSunValue());
         label.setText(sunValue);
         label.setForeground(Color.black);
+
         label.setFont(new Font("MV Boli",Font.PLAIN,20));
         //label.setBackground();
         //label.setOpaque(false);

@@ -7,6 +7,7 @@ import Others.Projectile;
 public class Zombies extends Projectile{
     private int zombieDamage;
     private int zombieHealth;
+
     private int zombieFirstSpeed;
     private int effectedZombieDelay = 0;
 
@@ -15,16 +16,21 @@ public class Zombies extends Projectile{
     private int check = 0;
 
     private boolean stopMotion = false;
+
     protected static boolean gameOver = false;
     public ImageIcon image;
 
     public Zombies(int zombieSpeed,int zombieHealth,int zombieDamage,int x,int y,ImageIcon image,int xBackyard,int yBackyard){
+
         super(x,y,zombieSpeed,image.getIconWidth(),image.getIconHeight(),xBackyard,yBackyard);
+
         this.zombieHealth = zombieHealth;
         this.zombieDamage = zombieDamage;
         this.image = image;
+
         this.zombieFirstHealth = zombieHealth;
         this.zombieFirstSpeed = zombieSpeed;
+
     }
 
     public void updateXCoordinate(){
@@ -60,7 +66,9 @@ public class Zombies extends Projectile{
     }
 
     public void zombieHit(int damage){
+
         if (isImageActive()){
+
             zombieHealth -= damage;
         }
     }
@@ -82,6 +90,7 @@ public class Zombies extends Projectile{
     public void setCheck(int check){
         this.check = check;
     }
+
 
     public int getFirstHealth(){
         return zombieFirstHealth;

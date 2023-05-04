@@ -14,6 +14,7 @@ public class ObjectStable {
     public static ArrayList<Zombies> zombiesList;
     public static ArrayList<LawnMower> lawnMowersList;
     public static ArrayList<Plants> removeList;
+
     public boolean gameOver = false;
     public boolean gameWin = false;
     private int delayZombies = 0;
@@ -24,7 +25,9 @@ public class ObjectStable {
         lawnMowersList = new ArrayList<LawnMower>();
         removeList = new ArrayList<>();
         random = new Random();
+
         //updateZombiesBackyard();
+
         updateLawnMowerBackyard();
         //updateTestZombies(1, 16);
     }
@@ -35,7 +38,9 @@ public class ObjectStable {
     }
 
     //update zombies in this round
+
     /*public void updateZombiesBackyard(){
+
         for(int i=0; i < numZombies;i++){
             //int j = random.nextInt(4);
             int j = 1;
@@ -50,6 +55,7 @@ public class ObjectStable {
                 }
             }
         }
+
     }*/
     
     public void zombiesListName(int i,int j,int z){
@@ -186,7 +192,9 @@ public class ObjectStable {
         for(int i = 0; i < 5;i++){
             for(int j = 0; j < list[i];j++){
                 int z = random.nextInt(3);
+
                 /*switch(z){
+
                     case 0:{
                         zombiesList.add(new Zombie_normal(-1, 200, 1000 + j*50, i*100));
                         break;
@@ -201,6 +209,7 @@ public class ObjectStable {
                     }
                 }
             }
+
         }*/
         
     }
@@ -208,6 +217,7 @@ public class ObjectStable {
     public void updateLawnMowerBackyard(){
         for(int i = 0; i < 5;i++){
             lawnMowersList.add(new LawnMower(210, 130 + i*100,210,130 + i*100));
+
         }
     }
 
@@ -220,6 +230,7 @@ public class ObjectStable {
     //draw zombie in the screen
     public void drawZombies(GamePanel panel,Graphics g){
         for(Zombies i : zombiesList){
+
             if (i.isImageActive())
             //g2D.drawImage(i.getImage(), x, i.getYCoordinate(), null);
                 i.image.paintIcon(panel, g, i.getXCoordinate(),i.getYCoordinate());
@@ -242,17 +253,21 @@ public class ObjectStable {
     public void checkCollision(ArrayList<Plants> plantsList, ArrayList<Pea> peaUpdateList){
         for(Pea i : peaUpdateList){
             if (checkZombiesLine(zombiesList,i.getXFirstCoordinate() ,i.getYBackyard()) && !i.getPrepareStop()){
+
                 i.setShootActive(true);
             }            
             else
                 i.setShootActive(false);
+
         }
 
         for(Zombies i : zombiesList){
             if (checkInteract(plantsList, i))
+
                 i.setStopMotion(true);
             else
                 i.setStopMotion(false);
+
         }
         
         for(Zombies i : zombiesList){
@@ -260,10 +275,12 @@ public class ObjectStable {
             //Rectangle2D.Float r = i.getHitBox();
                 for(Plants j : plantsList){
                     if (i.getHitBox().intersects(j.getHitBox())){
+
                         if (j.isImageActive()){
                             j.plantHit(i.getDamage());
                             if (j.getHealth() <= 0){
                                 j.setImageActive(false);
+
                             }
                             //i.setStop(true);
                         }
@@ -288,11 +305,13 @@ public class ObjectStable {
                             k.effectOnZombies(i);
                             if (i.getHealth() <= 0){
                                 i.setImageActive(false);
+
                             }
                         }
                     }
                 }
                 for(LawnMower n: lawnMowersList){
+
                     if (n.getYBackyard() == i.getYBackyard())
                         if (i.getHitBox().intersects(n.getHitBox())){
                             i.setHealth(0);
@@ -309,17 +328,21 @@ public class ObjectStable {
 
     public boolean checkZombiesLine(ArrayList<Zombies> zombiesList,int x,int y){
         for(Zombies i : zombiesList){
+
             if (i.getYBackyard() == y && i.getXCoordinate() <= 1000){
+
                 if (x < i.getXCoordinate())
                     return true; 
             }
         }
         return false;
     }
+
     
     public void reset(){
         zombiesList.clear();
         //updateZombiesBackyard();
+
         lawnMowersList.clear();
         updateLawnMowerBackyard();
         gameOver = false;
@@ -355,9 +378,11 @@ public class ObjectStable {
 
     public boolean checkInteract(ArrayList<Plants> plantsList,Zombies j){
         for(Plants i : plantsList){
+
             if (i.getYBackyard() == j.getYBackyard())
                 if (j.getHitBox().intersects(i.getHitBox()))
                     return true;
+
         }
         return false;
     }

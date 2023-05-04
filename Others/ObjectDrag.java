@@ -54,6 +54,7 @@ public class ObjectDrag {
                     break;                     
                 }
                 case 3:{
+
                     plantsCardList.add(new Walnut(500, 200, 80 + (i-1)*52, 5,40,80 + 26 + (i-1)*52));
                     break;                     
                 }
@@ -106,12 +107,16 @@ public class ObjectDrag {
                 }
             else{
                 if (i.getName().equals("PeaShooter")){
+
                     PeaShooter peaShooter = new PeaShooter(50, 200,(int) i.getImageCorner().getX(),(int) i.getImageCorner().getY(), i.getXBackyard(),i.getYBackyard());
+
                     peaUpdateList.add(peaShooter.getPea());
                     plantsList.add(peaShooter);
                 }
                 else if (i.getName().equals("SunFlower")){
+
                     SunFlower sunFlower = new SunFlower(0, 200, (int) i.getImageCorner().getX(),(int) i.getImageCorner().getY(), i.getXBackyard(),i.getYBackyard());
+
                     plantsList.add(sunFlower);
                     sunFlowerList.add(sunFlower);
                 }
@@ -142,6 +147,7 @@ public class ObjectDrag {
 
     public void updateShovel(Point point){
         for(Plants i : plantsList){
+
             if ( i.getXBackyard() == point.getX() && i.getYBackyard() == point.getY()){
                 i.setImageActive(false);
                 for(Pea j : peaUpdateList){
@@ -154,6 +160,7 @@ public class ObjectDrag {
                                 //i.getImageFirstPoint().setLocation(-500, -500);
                                 break;
                             }
+
                     }
                 }
             }
@@ -184,6 +191,7 @@ public class ObjectDrag {
     public void updatePeaList(){
         for(Pea i : peaUpdateList){
             i.updatePea();
+
         }
     }
 
