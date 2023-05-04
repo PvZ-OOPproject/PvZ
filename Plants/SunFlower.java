@@ -9,8 +9,8 @@ public class SunFlower extends Plants{
     private int delay = 0;
     private int count = 0;
    
-    public SunFlower(int plantDamage, int plantHealth,int x,int y) {
-        super(plantDamage, plantHealth,x,y,new ImageIcon("sun_flower.gif"),new ImageIcon("sun_flower.gif"),"SunFlower",50);
+    public SunFlower(int plantDamage, int plantHealth,int x,int y,int xBackyard,int yBackyard) {
+        super(plantDamage, plantHealth,x,y,new ImageIcon("sun_flower.gif"),new ImageIcon("sun_flower_price.png"),"SunFlower",50,xBackyard,yBackyard);
         countSunFlower++;
     }
 

@@ -5,10 +5,12 @@ import java.awt.event.MouseEvent;
 public class Backyard {
     private int[] rows;
     private int[] columns;
+    private int[][] availablePositions = new int[5][10];
 
     public Backyard(){
         setRowsCoordinates();
         setColumnsCoordinates();
+        setAvailableCoordinate(availablePositions);
     }
 
     private void setRowsCoordinates(){
@@ -25,8 +27,19 @@ public class Backyard {
         }        
     }
 
+    public void setAvailableCoordinate(int [][] a){
+        for(int i = 0; i < 5; i++)
+            for(int j = 0; j < 10;j++){
+                a[i][j] = 0;
+            }
+    }
+
+    public int[][] getAvailableCoordinate(){
+        return availablePositions;
+    }
+
     public int[] qualifiedPositionBackyard(MouseEvent e){
-        int[] a = {0,0,0};
+        int[] a = {0,0,0,0,0};
         for(int i = 0; i < 5;i++)
             for(int j = 1; j < 10;j++)
                 // set a circle area in the rectangle are qualified to place plant
@@ -34,9 +47,18 @@ public class Backyard {
                     a[0] = columns[j];
                     a[1] = rows[i];
                     a[2] = 1;
+                    a[3] = i;
+                    a[4] = j;
                     return a;
                 }
         return a;
     }
 
+    public int[] getRows(){
+        return rows;
+    }
+
+    public int[] getColumns(){
+        return columns;
+    }
 }

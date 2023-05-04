@@ -15,6 +15,10 @@ public class Projectile {
         hitBox.x += speed;
     }
 
+    public int getSpeed(){
+        return speed;
+    }
+
     public void setPos(int x,int y){
         hitBox.x = x;
         hitBox.y = y;

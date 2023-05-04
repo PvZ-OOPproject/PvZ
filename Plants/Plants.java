@@ -16,6 +16,9 @@ public class Plants extends Projectile{
     public String name;
     private int plantsValue;
    
+    private int xBackyard;
+    private int yBackyard;
+
     public ImageIcon image;
     public int WIDTH;
     public int HEIGHT;
@@ -25,7 +28,7 @@ public class Plants extends Projectile{
     public Point currentPoint;
     public int check = 0;
 
-    public Plants(int plantDamage,int plantHealth,int x,int y,ImageIcon image,ImageIcon cardImage,String name,int plantsValue){
+    public Plants(int plantDamage,int plantHealth,int x,int y,ImageIcon image,ImageIcon cardImage,String name,int plantsValue,int xBackyard,int yBackyard){
         super(x,y,0,image.getIconWidth(),image.getIconHeight());
         this.plantDamage = plantDamage;
         this.plantHealth = plantHealth;
@@ -37,10 +40,12 @@ public class Plants extends Projectile{
         this.imageCorner = new Point(x,y);
         this.imageFirstPoint = new Point(x,y);
         this.currentPoint = new Point(x,y);
-        this.WIDTH = cardImage.getIconWidth();
-        this.HEIGHT = cardImage.getIconHeight();
+        this.WIDTH = image.getIconWidth();
+        this.HEIGHT = image.getIconHeight();
         this.plantsValue = plantsValue;
         plantCount++;
+        this.xBackyard = xBackyard;
+        this.yBackyard = yBackyard;
     }
 
     public int getDamage(){
@@ -87,11 +92,17 @@ public class Plants extends Projectile{
         return cardImage;
     }
 
+    public int getXBackyard(){
+        return xBackyard;
+    }
+
+    public int getYBackyard(){
+        return yBackyard;
+    }
+
     public void plantHit(Zombies zombie){
         if (isActive()){
             plantHealth -= zombie.getDamage();
-            if (plantHealth <= 0)
-                setActive(false);
         }
     }
 
