@@ -5,47 +5,45 @@ import java.awt.Point;
 import javax.swing.ImageIcon;
 
 import Others.Projectile;
-import Zombies.Zombies;
 
 public class Plants extends Projectile{
     private int plantDamage;
     private int plantHealth;
-    private int xCoordinate;
-    private int yCoordinate;
     protected static int plantCount = 0;
     public String name;
     private int plantsValue;
    
-    private int xBackyard;
-    private int yBackyard;
+
+    private boolean checkDelay = false;
+    private int constDelay;
+    private int delay = 0;
+    private ImageIcon imageDelay;
+
 
     public ImageIcon image;
     public int WIDTH;
     public int HEIGHT;
     public ImageIcon cardImage;
-    public Point imageCorner;
+    private Point imageCorner;
     public Point imageFirstPoint;
     public Point currentPoint;
     public int check = 0;
 
-    public Plants(int plantDamage,int plantHealth,int x,int y,ImageIcon image,ImageIcon cardImage,String name,int plantsValue,int xBackyard,int yBackyard){
-        super(x,y,0,image.getIconWidth(),image.getIconHeight());
+
+    public Plants(int plantDamage,int plantHealth,int x,int y,ImageIcon image,ImageIcon cardImage,String name,int plantsValue,int xBackyard,int yBackyard,ImageIcon imageDelay,int constDelay){
+        super(x,y,0,image.getIconWidth(),image.getIconHeight(),xBackyard,yBackyard);
         this.plantDamage = plantDamage;
         this.plantHealth = plantHealth;
-        this.xCoordinate = x;
-        this.yCoordinate = y;
         this.image = image;
         this.cardImage = cardImage;
         this.name = name;
         this.imageCorner = new Point(x,y);
         this.imageFirstPoint = new Point(x,y);
         this.currentPoint = new Point(x,y);
-        this.WIDTH = image.getIconWidth();
-        this.HEIGHT = image.getIconHeight();
+
         this.plantsValue = plantsValue;
-        plantCount++;
-        this.xBackyard = xBackyard;
-        this.yBackyard = yBackyard;
+        this.imageDelay = imageDelay;
+        this.constDelay = constDelay;
     }
 
     public int getDamage(){
@@ -54,22 +52,6 @@ public class Plants extends Projectile{
 
     public int getHealth(){
         return plantHealth;
-    }
-
-    public int getXCoordinate(){
-        return xCoordinate;
-    }
-
-    public void setXCoordinate(int x){
-        this.xCoordinate = x;
-    }
-
-    public void setYCoordinate(int y){
-        this.yCoordinate = y;
-    }
-
-    public int getYCoordinate(){
-        return yCoordinate;
     }
 
     public ImageIcon getImage(){
@@ -84,6 +66,14 @@ public class Plants extends Projectile{
         return imageFirstPoint;
     }
 
+    public Point getImageCorner(){
+        return imageCorner;
+    }
+
+    public void setImageCorner(Point point){
+        this.imageCorner = point;
+    }
+
     public String getName(){
         return name;
     }
@@ -92,20 +82,37 @@ public class Plants extends Projectile{
         return cardImage;
     }
 
-    public int getXBackyard(){
-        return xBackyard;
-    }
-
-    public int getYBackyard(){
-        return yBackyard;
-    }
-
-    public void plantHit(Zombies zombie){
-        if (isActive()){
-            plantHealth -= zombie.getDamage();
+    public void plantHit(int damage){
+        if (isImageActive()){
+            plantHealth -= damage;
         }
     }
 
+    public ImageIcon getImageDelay(){
+        return imageDelay;
+    }
 
+    public int getConstDelay(){
+        return constDelay;
+    }
 
+    public void setConstDelay(int delay){
+        this.constDelay = delay;
+    }
+
+    public int getDelay(){
+        return delay;
+    }
+
+    public void setDelay(int delay){
+        this.delay = delay;
+    }
+
+    public boolean getCheckDelay(){
+        return checkDelay;
+    }
+
+    public void setCheckDelay(boolean active){
+        this.checkDelay = active;
+    }
 }

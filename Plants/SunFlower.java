@@ -10,7 +10,8 @@ public class SunFlower extends Plants{
     private int count = 0;
    
     public SunFlower(int plantDamage, int plantHealth,int x,int y,int xBackyard,int yBackyard) {
-        super(plantDamage, plantHealth,x,y,new ImageIcon("sun_flower.gif"),new ImageIcon("sun_flower_price.png"),"SunFlower",50,xBackyard,yBackyard);
+        super(plantDamage, plantHealth,x,y,new ImageIcon("sun_flower.gif"),new ImageIcon("sun_flower_price.png"),"SunFlower",50,xBackyard,yBackyard,new ImageIcon("sun_flower_price.png"),250);
+
         countSunFlower++;
     }
 
@@ -19,7 +20,7 @@ public class SunFlower extends Plants{
     }
 
     public void updateSun(ArrayList<Sun> sunList){
-        if (isActive()){
+        if (isImageActive()){
             if (delay <= 400){
                 delay += 2;
             }
@@ -32,8 +33,6 @@ public class SunFlower extends Plants{
                     count += 10;
                 else
                     count = 0;
-                //System.out.println(sunList.size());
-                //System.out.println(sunList.size());
             }
         }
     }

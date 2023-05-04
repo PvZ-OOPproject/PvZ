@@ -8,9 +8,11 @@ import javax.swing.ImageIcon;
 public class Shovel {
     private int xCoordinate;
     private int yCoordinate;
-    private boolean active = true;
+
+    private boolean imageActive = true;
     private Point imageFirstPoint;
-    public Point imageCorner;
+    private Point imageCorner;
+
     
 
     ImageIcon image = new ImageIcon("shovel.png");
@@ -34,12 +36,14 @@ public class Shovel {
         return yCoordinate;
     }
 
-    public boolean isActive(){
-        return active;
+
+    public boolean isImageActive(){
+        return imageActive;
     }
 
-    public void setActive(boolean active){
-        this.active = active;
+    public void setImageActive(boolean active){
+        this.imageActive = active;
+
     }
 
     public Point getImageFirstPoint(){

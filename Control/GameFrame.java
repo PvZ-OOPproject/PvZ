@@ -28,10 +28,11 @@ public class GameFrame extends JFrame {
         String sunValue = String.valueOf(panel.getSunValue());
         label.setText(sunValue);
         label.setForeground(Color.black);
-        label.setFont(new Font("MV Boli",Font.PLAIN,20));*/
+
+        label.setFont(new Font("MV Boli",Font.PLAIN,20));
         //label.setBackground();
         //label.setOpaque(false);
-        /*label.setHorizontalAlignment(JLabel.CENTER);
+        label.setHorizontalAlignment(JLabel.CENTER);
         label.setBounds(15, 60, 55, 20);
 
 
