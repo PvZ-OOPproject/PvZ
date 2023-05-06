@@ -2,13 +2,13 @@ package Zombies;
 
 import javax.swing.ImageIcon;
 
+import Control.AudioPlayer;
 import Others.Projectile;
 
 public class Zombies extends Projectile{
     private int zombieDamage;
     private int zombieHealth;
-
-    private int zombieFirstSpeed;
+    private double zombieFirstSpeed;
     private int effectedZombieDelay = 0;
 
     private int zombieFirstHealth;
@@ -16,21 +16,16 @@ public class Zombies extends Projectile{
     private int check = 0;
 
     private boolean stopMotion = false;
-
     protected static boolean gameOver = false;
     public ImageIcon image;
 
-    public Zombies(int zombieSpeed,int zombieHealth,int zombieDamage,int x,int y,ImageIcon image,int xBackyard,int yBackyard){
-
+    public Zombies(double zombieSpeed,int zombieHealth,int zombieDamage,double x,double y,ImageIcon image,int xBackyard,int yBackyard){
         super(x,y,zombieSpeed,image.getIconWidth(),image.getIconHeight(),xBackyard,yBackyard);
-
         this.zombieHealth = zombieHealth;
         this.zombieDamage = zombieDamage;
         this.image = image;
-
         this.zombieFirstHealth = zombieHealth;
         this.zombieFirstSpeed = zombieSpeed;
-
     }
 
     public void updateXCoordinate(){
@@ -66,9 +61,7 @@ public class Zombies extends Projectile{
     }
 
     public void zombieHit(int damage){
-
         if (isImageActive()){
-
             zombieHealth -= damage;
         }
     }
@@ -91,7 +84,6 @@ public class Zombies extends Projectile{
         this.check = check;
     }
 
-
     public int getFirstHealth(){
         return zombieFirstHealth;
     }
@@ -100,7 +92,7 @@ public class Zombies extends Projectile{
         this.zombieHealth = health;
     }
 
-    public int getFirstSpeed(){
+    public double getFirstSpeed(){
         return zombieFirstSpeed;
     }
 
@@ -110,5 +102,6 @@ public class Zombies extends Projectile{
 
     public void setEffectedZombieDelay(int delay){
         this.effectedZombieDelay = delay;
-    }    
+    }
+
 }
