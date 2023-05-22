@@ -54,6 +54,10 @@ public class Backyard {
         return a;
     }
 
+    public void reset(){
+        setAvailableCoordinate(availablePositions);
+    }
+
     public int[] getRows(){
         return rows;
     }

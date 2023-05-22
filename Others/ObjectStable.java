@@ -1,12 +1,21 @@
 package Others;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.ImageIcon;
+
+import Control.AudioPlayer;
 import Control.GamePanel;
+import GameState.PlayingState.Playing;
 import Plants.Pea;
 import Plants.Plants;
+import Zombies.Gargantuar;
+import Zombies.Zombie_bucket_head;
+import Zombies.Zombie_cone_head;
+import Zombies.Zombie_football;
 import Zombies.Zombie_normal;
 import Zombies.Zombies;
 
@@ -15,32 +24,44 @@ public class ObjectStable {
     public static ArrayList<LawnMower> lawnMowersList;
     public static ArrayList<Plants> removeList;
 
+    public static ArrayList<AudioPlayer> audioList;
+
     public boolean gameOver = false;
-    public boolean gameWin = false;
+    public boolean checkFinal = false;
     private int delayZombies = 0;
+    private int numTurn;
+    private int numFinal;
+    private int[] list1 = new int[3];
+    private int percent = 0;
+    private double percent1 = 0;
+    //private int turn;
     Random random;
+
+    private int n = 0;
+
+    private AudioPlayer audioPlayer;
+
     
-    public ObjectStable(){ 
+    public ObjectStable(AudioPlayer audioPlayer){ 
         zombiesList = new ArrayList<Zombies>();
         lawnMowersList = new ArrayList<LawnMower>();
         removeList = new ArrayList<>();
+
+        audioList = new ArrayList<>();
+
         random = new Random();
-
         //updateZombiesBackyard();
-
         updateLawnMowerBackyard();
         //updateTestZombies(1, 16);
+
+        this.audioPlayer = audioPlayer;
+
+
     }
     
-    //declare types of zombies
-    enum Zombie {
-        Normal,Football,Plastic,Iron;
-    }
 
     //update zombies in this round
-
     /*public void updateZombiesBackyard(){
-
         for(int i=0; i < numZombies;i++){
             //int j = random.nextInt(4);
             int j = 1;
@@ -55,22 +76,39 @@ public class ObjectStable {
                 }
             }
         }
-
     }*/
     
     public void zombiesListName(int i,int j,int z){
         switch(j){
             case 0:{
-                zombiesList.add(new Zombie_normal(-2, 200, 1200 + z*50, i*100,1000, 130 + i*100));
+                Zombies zombies = new Zombie_normal(- 80 / (4.7 * 50), 181,2, 1200 + z*50, i*100 + 20,1000, 130 + i*100);
+                zombiesList.add(zombies);
+                audioList.add(zombies.getSound());
                 break;
             }
             case 1:{
-                zombiesList.add(new Zombie_normal(-2, 200, 1200 + z*50, i*100,1000, 130 + i*100));
+                Zombies zombies = new Zombie_cone_head(- 80 / (4.7 * 50), 551, 2,1200 + z*50, i*100 + 20,1000, 130 + i*100);
+                zombiesList.add(zombies);
+                audioList.add(zombies.getSound());
                 break;
             }
             case 2:{
-                zombiesList.add(new Zombie_normal(-2, 200, 1200 + z*50, i*100,1000, 130 + i*100));
+                Zombies zombies = new Zombie_bucket_head(- 80 / (4.7 * 50), 1281, 2,1200 + z*50, i*100 + 20,1000, 130 + i*100);
+                zombiesList.add(zombies);
+                audioList.add(zombies.getSound());
                 break;
+            }
+            case 3:{
+                Zombies zombies = new Zombie_football(- 80 / (2.5 * 50), 1581, 2,1200 + z*50, i*100 + 20,1000, 130 + i*100);
+                zombiesList.add(zombies);
+                audioList.add(zombies.getSound());
+                break;                
+            }
+            case 4:{
+                Zombies zombies = new Gargantuar(- 80 / (2.5 * 50), 3000, 5000,1200 + z*50, i*100 - 20,1000, 130 + i*100);
+                zombiesList.add(zombies);
+                audioList.add(zombies.getSound());
+                break; 
             }                
         }
     }
@@ -81,11 +119,11 @@ public class ObjectStable {
         while (z < k){
             int i = random.nextInt(5);
             int j = typeBegin + random.nextInt(typeEnd - typeBegin + 1);
-            zombiesListName(i, j,0);
+            zombiesListName(i, j, 0);
             z++;
         }
     }
-    public void addFinalZombies(int num){      
+    public void addFinalZombies(int num,int limitType){      
         int a = num/5;
         int b = num % 5;
         int[] list1 = {a,a,a,a,a};
@@ -103,7 +141,7 @@ public class ObjectStable {
                 }
             }
         }
-        int limit = 3;
+        int limit = limitType;
         int count = 0;
         int test;
         if (b == 0)
@@ -149,75 +187,140 @@ public class ObjectStable {
         return true;
     }
 
-    public void updateTestZombies(int turn,int numTurn,int numFinal){
-        if (zombiesList.size() < numTurn){
-            if ( delayZombies < 400){
-                delayZombies += 2;
+    public void updateTestZombies(int level,int numTurn,int numFinal){
+        int[] list = new int[3];
+        for(int i = 1; i < 3 - 1;i++){
+            list[i] = numTurn / 3;
+            this.list1[i] = numTurn / 3;
+        }
+        list[3 - 1] = numTurn / (3 + 1);
+        list1[3-1] = numTurn / (3 + 1);
+        list[0] = numTurn;
+        list1[0] = numTurn;
+        for(int i = 1; i < 3;i++){
+            list[0] -= list[i];
+        }
+        this.numTurn = numTurn;
+        this.numFinal = numFinal;
+        if (zombiesList.size() + n < numTurn){
+            if (delayZombies < 200){
+                delayZombies += 1;
             }
             else{
-                if (zombiesList.size() == 0){
-                    addTurnZombies(1,1, 0, 2);
+                if (zombiesList.size() + n == 0){
+                    addTurnZombies(1,1, 0, 0);
                 }
-                else{
+                else if (zombiesList.size() + n < 3){
                     if (readyToAddZombies())
-                        addTurnZombies(1,2, 0, 2);
+                        addTurnZombies(1,3, 0, 2);                   
                 }
+                else if (zombiesList.size() + n >= 3 && zombiesList.size() + n < list[0]){
+                    if (readyToAddZombies()){
+                        if (level == 1)
+                            addTurnZombies(1,2, 0, 0);
+                        if (level == 2)
+                            addTurnZombies(1,2, 0, 1);
+                        if (level == 3)
+                            addTurnZombies(2,5, 0, 3);
+                    }
+                }
+                else if (zombiesList.size() + n >= list[0] && zombiesList.size() + n < list[1] + list[0]){
+                    if (readyToAddZombies()){
+                        if (level == 1)
+                            addTurnZombies(1,3, 0, 1);
+                        if (level == 2)
+                            addTurnZombies(1,3, 0, 2);
+                        if (level == 3)
+                            addTurnZombies(3,5, 2, 3);
+                    }
+                }
+                else if (zombiesList.size() + n >= list[1] + list[0] && zombiesList.size()  + n< numTurn){
+                    if (readyToAddZombies()){
+                        if (level == 1)
+                            addTurnZombies(2,4, 0, 2);
+                        if (level == 2)
+                            addTurnZombies(2,4, 0, 3);
+                        if (level == 3)
+                            addTurnZombies(3,5, 2, 4);
+                    }
+                }
+
             }
         }
         else{
-            if (checkFinal() && gameWin == false){
-                addFinalZombies(numFinal);
-                gameWin = true;
+            if (checkFinal() && checkFinal == false){
+                if (level == 1)
+                    addFinalZombies(numFinal,3);
+                if (level == 2)
+                    addFinalZombies(numFinal, 4);
+                if (level == 3)
+                    addFinalZombies(numFinal, 5); 
+                checkFinal = true;
             }
         }
-        //System.out.println(zombiesList.size());
+    }
 
-        
-        
-        
-        /*int n = 16;
-        int a = 3 + random.nextInt(2);
-        int b = 2 + random.nextInt(3);
-        int c = 2 + random.nextInt(2);
-        int d;
-        if (a + b + c >= 10){
-            d = 2 + random.nextInt(2);
-        }
-        else {
-            d = 3 + random.nextInt(2);
-        }
-        int e = n - a - b - c - d;
-        int[] list = {a,b,c,d,e};
-
-        for(int i = 0; i < 5;i++){
-            for(int j = 0; j < list[i];j++){
-                int z = random.nextInt(3);
-
-                /*switch(z){
-
-                    case 0:{
-                        zombiesList.add(new Zombie_normal(-1, 200, 1000 + j*50, i*100));
-                        break;
+    public void updateRemove(){
+        ArrayList<Zombies> list = new ArrayList<>();
+        for(Zombies i : zombiesList){
+            if (!i.isImageActive()){
+                if (i.getZombieExplore()){
+                    if  (i.getDeathDelay() <= i.getDeath2()){
+                        list.add(i);
                     }
-                    case 1:{
-                        zombiesList.add(new Zombie_normal(-1, 200, 1000 + j*50, i*100));
-                        break;
-                    }
-                    case 2:{
-                        zombiesList.add(new Zombie_normal(-1, 200, 1000 + j*50, i*100));
-                        break;
+                }
+                else{
+                    if  (i.getDeathDelay() <= i.getDeath1()){
+                        list.add(i);
                     }
                 }
             }
+            else {
+                list.add(i);
+            }
+        }
+        n += zombiesList.size() - list.size();
 
-        }*/
+        zombiesList.clear();
+        for(Zombies i : list){
+            zombiesList.add(i);
+        }
         
+    }
+
+    public void drawPercent(Graphics g){
+        if (delayZombies >= 200){
+            g.setColor(Color.blue);
+            if (zombiesList.size() + n <= numTurn){
+                percent = (int) ((double) 210 * zombiesList.size() / numTurn);
+                if (percent1 <= percent)
+                    percent1 += (double) 1 / 50;
+                g.fillRect(1000 - (int) percent1, 565,(int) percent1 , 25);
+                g.setColor(Color.red);
+                g.fillRect(1000 - 70, 565,10 , 25);
+                g.fillRect(1000 - 140, 565,10 , 25);
+                g.fillRect(1000 - 210, 565,10 , 25);
+                g.drawImage(new ImageIcon("Image/GUI/bar.png").getImage(),1000-210,565,null);
+                g.drawImage(new ImageIcon("Image/GUI/zom_head.png").getImage(),1000 - (int) percent1 - 20,555,null);
+            }
+            else{
+                percent = 210;
+                if (percent1 <= percent)
+                    percent1 += (double) 1 / 50;
+                if (percent1 > percent)
+                    percent1 = 210;
+                g.fillRect(1000 - (int) percent1, 565, (int) percent1, 25);
+                g.drawImage(new ImageIcon("Image/GUI/bar.png").getImage(),1000-210,565,null);
+                g.drawImage(new ImageIcon("Image/GUI/zom_head.png").getImage(),1000 - (int) percent1 - 20,555,null);
+            }        
+        }
     }
 
     public void updateLawnMowerBackyard(){
         for(int i = 0; i < 5;i++){
-            lawnMowersList.add(new LawnMower(210, 130 + i*100,210,130 + i*100));
-
+            LawnMower lawnMower = new LawnMower(210, 130 + i*100,210,130 + i*100);
+            lawnMowersList.add(lawnMower);
+            audioList.add(lawnMower.getSound());
         }
     }
 
@@ -230,122 +333,147 @@ public class ObjectStable {
     //draw zombie in the screen
     public void drawZombies(GamePanel panel,Graphics g){
         for(Zombies i : zombiesList){
-
-            if (i.isImageActive())
-            //g2D.drawImage(i.getImage(), x, i.getYCoordinate(), null);
-                i.image.paintIcon(panel, g, i.getXCoordinate(),i.getYCoordinate());
-                //indexList.add(zombiesList.indexOf(i);
+            if (i.isImageActive()){
+                i.getImage().paintIcon(panel, g,(int) i.getXCoordinate(),(int) i.getYCoordinate());
+            }
+            else{
+                if (i.getZombieExplore()){
+                    if (i.getDeathDelay() <= i.getDeath2()){
+                        i.getImage().paintIcon(panel, g,(int) i.getXCoordinate(),(int) i.getYCoordinate());
+                    }
+                }
+                else{
+                    if (i.getDeathDelay() <= i.getDeath1()){
+                        i.getImage().paintIcon(panel, g,(int) i.getXCoordinate(),(int) i.getYCoordinate());
+                    }
+                }
+            }
         }
     }
 
-    public void updateZombies(){
+    public void updateZombies(Playing playing){
         for(Zombies i : zombiesList){
-            i.updateXCoordinate();
+            i.update();
+            //i.updateAudioEffects(audioPlayer,playing);
+            if (i.getHealth() <= 0){
+                i.setImageActive(false);
+            }
         }
     }
 
     public void updateLawnMower(){
         for(LawnMower i : lawnMowersList){
             i.updateLawnMower();
+            i.updateAudioEffects(audioPlayer);
         }
     }
 
     public void checkCollision(ArrayList<Plants> plantsList, ArrayList<Pea> peaUpdateList){
         for(Pea i : peaUpdateList){
-            if (checkZombiesLine(zombiesList,i.getXFirstCoordinate() ,i.getYBackyard()) && !i.getPrepareStop()){
-
+            if (checkZombiesLine(zombiesList, i.getXFirstCoordinate() ,i.getYBackyard()) && !i.getPrepareStop()){
                 i.setShootActive(true);
             }            
             else
                 i.setShootActive(false);
-
         }
 
         for(Zombies i : zombiesList){
             if (checkInteract(plantsList, i))
-
                 i.setStopMotion(true);
             else
                 i.setStopMotion(false);
-
+            i.updateAudioEffects(audioPlayer);
         }
         
         for(Zombies i : zombiesList){
-            if (i.getXCoordinate() <= 1000){
-            //Rectangle2D.Float r = i.getHitBox();
-                for(Plants j : plantsList){
-                    if (i.getHitBox().intersects(j.getHitBox())){
-
-                        if (j.isImageActive()){
-                            j.plantHit(i.getDamage());
-                            if (j.getHealth() <= 0){
-                                j.setImageActive(false);
-
-                            }
-                            //i.setStop(true);
-                        }
-                        else{
-                            j.setPos(-500, -500);
-                            removeList.add(j);
-                            }
-                        }
-                }
-                for(Pea k : peaUpdateList){
-                    for(Plants m : removeList){
-                        //if ((int) m.getImageFirstPoint().getX() == k.getXFirstCoordinate() && (int) m.getImageFirstPoint().getY() == k.getYFirstCoordinate()){
-                        if (m.getXBackyard() == k.getXBackyard() && m.getYBackyard() == k.getYBackyard()){ 
-                            k.setStop(true);
-                            //m.getImageFirstPoint().setLocation(-500, -500);
-                        }
-                    }
-                    if (i.getHitBox().intersects(k.getHitBox())){
-                        if (k.isImageActive()){
-                            //i.zombieHit(k.getDamage());
-                            //k.setImageActive(false);
-                            k.effectOnZombies(i);
-                            if (i.getHealth() <= 0){
-                                i.setImageActive(false);
-
+            if (i.isImageActive()){
+                if (i.getXCoordinate() <= 1066){
+                    for(Plants j : plantsList){
+                        if (i.getHitBox().intersects(j.getHitBox())){
+                            if (j.getYBackyard() == i.getYBackyard()){
+                                if (j.isImageActive()){
+                                    j.plantHit(i,removeList);
+                                }
+                                else{
+                                    j.setPos(-500, -500);
+                                    removeList.add(j);
+                                }
                             }
                         }
                     }
-                }
-                for(LawnMower n: lawnMowersList){
-
-                    if (n.getYBackyard() == i.getYBackyard())
-                        if (i.getHitBox().intersects(n.getHitBox())){
-                            i.setHealth(0);
-                            n.setImageActive(false);
-                            i.setImageActive(false);
+                    for(Pea k : peaUpdateList){
+                        for(Plants m : removeList){
+                            if (m.getXBackyard() == k.getXBackyard() && m.getYBackyard() == k.getYBackyard()){ 
+                                k.setStop(true);
+                            }
                         }
+                        if (i.getHitBox().intersects(k.getHitBox())){
+                            if (k.isImageActive()){
+                                k.effectOnZombies(i);
+                                
+
+                                AudioPlayer sound = new AudioPlayer("hitting", 2);
+                                sound.setVolume(audioPlayer.getVolume());
+                                if (!audioPlayer.getEffectMute()){
+                                    sound.playEffect();
+                                }
+                            }
+                        }
+                    }
+                    for(LawnMower n: lawnMowersList){
+                        if (n.getYBackyard() == i.getYBackyard())
+                            if (i.getHitBox().intersects(n.getHitBox())){
+                                i.setHealth(0);
+                                n.setImageActive(false);
+                            }
+                    }
+                    if (i.checkGameOver())
+                        gameOver = true;
                 }
-                if (i.checkGameOver())
-                    gameOver = true;
             }
         }
-        //removeList.clear();
+
+        for(Plants i : plantsList){
+            i.explorePlants(zombiesList, removeList);
+        }
     }
 
-    public boolean checkZombiesLine(ArrayList<Zombies> zombiesList,int x,int y){
+    public boolean checkZombiesLine(ArrayList<Zombies> zombiesList,double x,int y){
         for(Zombies i : zombiesList){
-
-            if (i.getYBackyard() == y && i.getXCoordinate() <= 1000){
-
-                if (x < i.getXCoordinate())
-                    return true; 
-            }
+            if (i.isImageActive())
+                if (i.getYBackyard() == y && i.getXCoordinate() <= 1000){
+                    //if (x < i.getXCoordinate())
+                      //  return true; 
+                    if (x < i.getHitBox().getX() + i.getHitBox().getWidth())
+                        return true;
+                }
         }
         return false;
     }
-
     
     public void reset(){
         zombiesList.clear();
-        //updateZombiesBackyard();
-
         lawnMowersList.clear();
         updateLawnMowerBackyard();
+        delayZombies = 0;
+
         gameOver = false;
+        checkFinal = false;
+        n = 0;
+        percent1 = 0;
+        percent = 0;
+    }
+
+    public boolean checkGameWin(){
+        if (zombiesList.size() + n >= numFinal + numTurn){
+            for(Zombies i : zombiesList){
+                if (i.getHealth() > 0){
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     public boolean checkGameOver(){
@@ -378,16 +506,26 @@ public class ObjectStable {
 
     public boolean checkInteract(ArrayList<Plants> plantsList,Zombies j){
         for(Plants i : plantsList){
-
             if (i.getYBackyard() == j.getYBackyard())
                 if (j.getHitBox().intersects(i.getHitBox()))
                     return true;
-
         }
         return false;
     }
-}    
 
+    public void toggleMuteAudioEffects(){
+        for(AudioPlayer i : audioList){
+            if (!i.getEffectMute())
+                i.toggleEffectMute();
+        }
+    }
 
+    public void toggleUnMuteAudioEffects(){
+        for(AudioPlayer i : audioList){
+            if (i.getEffectMute()){
+                i.toggleEffectMute();
+            }
+        }
+    }
 
-
+}
