@@ -6,13 +6,16 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+
 public class LaunchPage implements ActionListener{
     
     JFrame frame = new JFrame();
     JButton myButton1 = new JButton("Click to start");
     JButton myButton2 = new JButton("Quit");
+    //JLabel label = new JLabel(new ImageIcon("").getImage());
 
     public LaunchPage(){
+    
 
         myButton1.setBounds(100, 160, 200, 40);
 
