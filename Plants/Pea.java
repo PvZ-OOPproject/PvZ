@@ -7,8 +7,8 @@ import Zombies.Zombies;
 
 public class Pea extends Projectile{
     private int damage;
-    private int xFirstCoordinate;
-    private int yFirstCoordinate;
+    private double xFirstCoordinate;
+    private double yFirstCoordinate;
     private int delay = 850;
     private boolean shootActive = false;
     private boolean stop = false;
@@ -19,21 +19,19 @@ public class Pea extends Projectile{
     //private static int WIDTH;// = image.getIconWidth();
     //private static int HEIGHT;
 
-    public Pea(int damage,int x,int y,int xBackyard,int yBackyard,ImageIcon image,String name){
-        super(x,y,8,image.getIconWidth(),image.getIconHeight(),xBackyard,yBackyard);
 
+    public Pea(int damage,double x,double y,int xBackyard,int yBackyard,ImageIcon image,String name){
+        super(x,y,850 / (1.425*50),image.getIconWidth(),image.getIconHeight(),xBackyard,yBackyard);
         this.damage = damage;
         this.xFirstCoordinate = x;
         this.yFirstCoordinate = y;
         this.image = image;
         this.name = name;
-
     }
 
     public void updatePea() {
         if (!stop){
             if (isShootActive()){
-
                 if (getXCoordinate() < delay + xFirstCoordinate){
                     setXCoordinate(getXCoordinate() + getSpeed());
                     this.updatePos();
@@ -56,7 +54,6 @@ public class Pea extends Projectile{
                             setImageActive(true);
                         else
                             setStop(true);
-
                     }
             }
 
@@ -64,21 +61,23 @@ public class Pea extends Projectile{
         }
         else{
             setXFirstCoordinate(-200);
-
             setPos(-200, getYCoordinate());
             setImageActive(false);
-
         }
     }
 
     public void effectOnZombies(Zombies zombies){
         zombies.zombieHit(getDamage());
+        zombies.setZombieHit(true);
+        zombies.setHit(0);
         setImageActive(false);
-        System.out.println(getName());
         if (getName().equals("IcePea")){
-            zombies.setSpeed(zombies.getFirstSpeed()/2);
-            zombies.setEffectedZombieDelay(0);
+            if (zombies.getSpeed() != 0){
+                zombies.setSpeed(zombies.getFirstSpeed()/2);
+                zombies.setEffectedZombieDelay(1);
+            }
         }
+
     }
 
     public String getName(){
@@ -93,14 +92,14 @@ public class Pea extends Projectile{
         return image;
     }
 
-    public int getXFirstCoordinate(){
+    public double getXFirstCoordinate(){
         return xFirstCoordinate;
     }
 
-    public int getYFirstCoordinate(){
+    public double getYFirstCoordinate(){
         return yFirstCoordinate;
     }
-    public void setXFirstCoordinate(int x){
+    public void setXFirstCoordinate(double x){
         this.xFirstCoordinate = x;
     }
 
@@ -130,4 +129,3 @@ public class Pea extends Projectile{
 
 
 }
-
