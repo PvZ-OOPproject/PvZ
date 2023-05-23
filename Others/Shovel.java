@@ -6,31 +6,31 @@ import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 
 public class Shovel {
-    private int xCoordinate;
-    private int yCoordinate;
+    private double xCoordinate;
+    private double yCoordinate;
     private boolean imageActive = true;
     private Point imageFirstPoint;
     private Point imageCorner;
     
 
-    ImageIcon image = new ImageIcon("shovel.png");
+    ImageIcon image = new ImageIcon("Image/Others/shovel.png");
 
-    public Shovel(int x,int y){
+    public Shovel(double x,double y){
         this.xCoordinate = x;
         this.yCoordinate = y;
-        imageCorner = new Point(x,y);
-        imageFirstPoint = new Point(x, y);
+        imageCorner = new Point((int) x, (int)y);
+        imageFirstPoint = new Point((int) x,(int) y);
     }
 
     public ImageIcon getImage(){
         return image;
     }
 
-    public int getXCoordinate(){
+    public double getXCoordinate(){
         return xCoordinate;
     }
 
-    public int getYCoordinate(){
+    public double getYCoordinate(){
         return yCoordinate;
     }
 

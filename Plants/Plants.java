@@ -1,10 +1,14 @@
 package Plants;
 
+import java.awt.Graphics;
 import java.awt.Point;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
+import Control.GamePanel;
 import Others.Projectile;
+import Zombies.Zombies;
 
 public class Plants extends Projectile{
     private int plantDamage;
@@ -12,13 +16,23 @@ public class Plants extends Projectile{
     protected static int plantCount = 0;
     public String name;
     private int plantsValue;
+
+    protected boolean plantHit = false;
+    protected int hit = 0;
    
     private boolean checkDelay = false;
     private int constDelay;
     private int delay = 0;
     private ImageIcon imageDelay;
 
-    public ImageIcon image;
+    private int deathDelay = 0;
+
+    private int finalDeath = 50;
+
+    private int exploreDelay = 0;
+    protected boolean explore = false;
+
+    private ImageIcon image;
     public int WIDTH;
     public int HEIGHT;
     public ImageIcon cardImage;
@@ -27,19 +41,41 @@ public class Plants extends Projectile{
     public Point currentPoint;
     public int check = 0;
 
-    public Plants(int plantDamage,int plantHealth,int x,int y,ImageIcon image,ImageIcon cardImage,String name,int plantsValue,int xBackyard,int yBackyard,ImageIcon imageDelay,int constDelay){
+    public Plants(int plantDamage,int plantHealth,double x,double y,ImageIcon image,ImageIcon cardImage,String name,int plantsValue,int xBackyard,int yBackyard,ImageIcon imageDelay,int constDelay){
         super(x,y,0,image.getIconWidth(),image.getIconHeight(),xBackyard,yBackyard);
         this.plantDamage = plantDamage;
         this.plantHealth = plantHealth;
         this.image = image;
         this.cardImage = cardImage;
         this.name = name;
-        this.imageCorner = new Point(x,y);
-        this.imageFirstPoint = new Point(x,y);
-        this.currentPoint = new Point(x,y);
+        this.imageCorner = new Point((int) x, (int) y);
+        this.imageFirstPoint = new Point((int) x, (int) y);
+        this.currentPoint = new Point((int) x, (int) y);
         this.plantsValue = plantsValue;
         this.imageDelay = imageDelay;
         this.constDelay = constDelay;
+    }
+
+    public void draw(GamePanel panel,Graphics g){
+        if (isImageActive()){
+            getImage().paintIcon(panel, g ,(int) currentPoint.getX(),(int) currentPoint.getY());
+        }
+    }
+
+    public void update(){
+        if (plantHit){
+            hit++;
+            if (hit == 20){
+                plantHit = false;
+                hit = 0;
+            }
+        }
+        if (!getExplore())
+            exploreDelay++;
+        if (getHealth() <= 0){
+            setImageActive(false);
+        }
+        animatedImage();
     }
 
     public int getDamage(){
@@ -50,8 +86,16 @@ public class Plants extends Projectile{
         return plantHealth;
     }
 
+    public void setHealth(int health){
+        this.plantHealth = health;
+    }
+
     public ImageIcon getImage(){
         return image;
+    }
+
+    public void setImage(ImageIcon image){
+        this.image = image;
     }
 
     public int getPlantsValue(){
@@ -70,6 +114,10 @@ public class Plants extends Projectile{
         this.imageCorner = point;
     }
 
+    public void setCurrentPoint(Point point){
+        this.currentPoint = point;
+    }
+
     public String getName(){
         return name;
     }
@@ -78,9 +126,20 @@ public class Plants extends Projectile{
         return cardImage;
     }
 
-    public void plantHit(int damage){
+    public void plantHit(Zombies zombies,ArrayList<Plants> list){
         if (isImageActive()){
-            plantHealth -= damage;
+            if (zombies.getName().equals("Gargantuar")){
+                zombies.setEatingDelay(true);
+                System.out.println(zombies.getEatingDelay());
+                if (zombies.getEatingDelay() == 100){
+                    plantHealth -= zombies.getDamage();
+                }        
+            }
+            else{
+                setPlantHit(true);
+                setHit(0);
+                plantHealth -= zombies.getDamage();
+            }
         }
     }
 
@@ -111,4 +170,57 @@ public class Plants extends Projectile{
     public void setCheckDelay(boolean active){
         this.checkDelay = active;
     }
+
+    public void explorePlants(ArrayList<Zombies> zombies,ArrayList<Plants> list){
+
+    }
+
+    public int getExploreDelay(){
+        return exploreDelay;
+    }
+
+    public void setExploreDelay(int delay){
+        this.exploreDelay = delay;
+    }
+
+    /*public AudioPlayer getAudioPlayer(){
+        return audioPlayer;
+    }*/
+
+    public void animatedImage() {
+
+    }
+
+    public int getDeathDelay(){
+        return deathDelay;
+    }
+
+    public void setDeathDelay(int delay){
+        this.deathDelay = delay;
+    }
+
+    public boolean getExplore(){
+        return explore;
+    }
+
+    public void setPlantHit(boolean active){
+        this.plantHit = active;
+    }
+
+    public boolean getPlantHit(){
+        return plantHit;
+    }
+
+    public void setHit(int num){
+        this.hit = num;
+    }
+
+    public int getFinalDeath(){
+        return finalDeath;
+    }
+
+    public void setFinalDeath(int num){
+        this.finalDeath = num;
+    }
+
 }

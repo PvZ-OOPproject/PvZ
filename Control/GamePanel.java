@@ -6,10 +6,11 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-import Others.Backyard;
-import Others.Card;
-import Others.ObjectDrag;
-import Others.ObjectStable;
+import GUI_Game.AudioOptions;
+import GameState.*;
+import GameState.LevelState.Level;
+import GameState.MainMenuState.MainMenu;
+import GameState.PlayingState.Playing;
 
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseAdapter;
@@ -21,16 +22,21 @@ public class GamePanel extends JPanel implements ActionListener,Runnable{
     public final int PANEL_WIDTH = 1066;
     public final int PANEL_HEIGHT = 600;
 
-    //Timer timer;
+    // program to create a loop of game
+    private Thread gameThread;
+    private int FPS = 50; // frame per second
 
-    Point prePt;
-    int check1 = 0;
-    int check2 = -1;
+    State state;
 
-    Backyard backyard;
-    ObjectStable object;
-    ObjectDrag objectDrag;
-    Card card;
+    Playing playing;
+    
+    MainMenu mainMenu;
+
+    Level level;
+
+    AudioOptions audioOptions;
+
+    AudioPlayer audioPlayer;
 
 
     public GamePanel(){
@@ -45,40 +51,38 @@ public class GamePanel extends JPanel implements ActionListener,Runnable{
         DragListener dragListener = new DragListener();
         this.addMouseListener(clickListener);
         this.addMouseMotionListener(dragListener);
+
+        audioPlayer = new AudioPlayer("song",1);
+        audioPlayer.playSong(0);
+
+        audioOptions = new AudioOptions(audioPlayer,this);
         
-        // declare object
-        objectDrag = new ObjectDrag(); // list of object can be controlled by mouse
-        object = new ObjectStable(); // list of object that are stable in game (such as zombie)
-        backyard = new Backyard(); // contains the coordinate of every position in the backyard
-        card = new Card(); // contains card price of plants
-
-        /*JLayeredPane layeredPane = new JLayeredPane();
-        layeredPane.setBounds(0, 0, 500, 500);
         
-
-        JLabel label = new JLabel();
-        label = new JLabel();
-
-        String sunValue = String.valueOf(getSunValue());
-        label.setText(sunValue);
-        label.setForeground(Color.green);
-        label.setFont(new Font("MV Boli",Font.PLAIN,20));
-        label.setBackground(Color.blue);
-        label.setOpaque(true);
-        label.setHorizontalAlignment(JLabel.CENTER);
-        label.setBounds(15, 60, 55, 20);
-
-        //layeredPane.add(label,JLayeredPane.DRAG_LAYER);
-
-        //this.add(layeredPane);
-        this.add(label,JLayeredPane.DRAG_LAYER);
-        */
-
+        state = new State(this);
+        level = new Level(this);
+        mainMenu = new MainMenu(this,level);
+        playing = new Playing(this,level,mainMenu);
+    
         // run a loop of game
         startGameThread(); 
 
-        //timer = new Timer(10,this); //set up a loop of game
-        //timer.start(); //run game
+    }
+
+    public void update(){
+        switch (GameState.state){
+            case MAIN_MENU:{
+                mainMenu.update();
+                break;
+            }
+            case PLAYING: {
+                playing.update();
+                break;
+            }
+            case LEVEL: {
+                level.update();
+                break;
+            }
+        }
     }
 
     public void paint(Graphics g){
@@ -87,217 +91,25 @@ public class GamePanel extends JPanel implements ActionListener,Runnable{
 
         Graphics2D g2D = (Graphics2D) g;
 
-        g2D.drawImage(new ImageIcon("backyard.png").getImage(),0,0, null); // draw backyard
-        
-        g2D.setFont(new Font("MV Boli",Font.PLAIN,20));
-        g2D.setColor(Color.BLACK);
-        g2D.drawString(String.valueOf(getSunValue()), 18, 78);
-
-
-        // draw grid to 
-        g2D.setColor(Color.BLACK);
-        g2D.drawLine(0,80,1066,80);
-        g2D.drawLine(0,180,1066,180);
-        g2D.drawLine(0,280,1066,280);
-        g2D.drawLine(0,380,1066,380);
-        g2D.drawLine(0,480,1066,480);
-        g2D.drawLine(0,580,1066,580);
-
-        g2D.drawLine(250,0,250,600);
-        g2D.drawLine(330,0,330,600);
-        g2D.drawLine(410,0,410,600);
-        g2D.drawLine(490,0,490,600);
-        g2D.drawLine(570,0,570,600);
-        g2D.drawLine(650,0,650,600);
-        g2D.drawLine(730,0,730,600);
-        g2D.drawLine(810,0,810,600);
-        g2D.drawLine(890,0,890,600);
-        g2D.drawLine(970,0,970,600);
-
-        g2D.drawLine(80,0,80,600);
-        g2D.drawLine(440,0,440,600);
-        g2D.drawLine(0,75,1066,75);
-
-
-        objectDrag.drawPlantsCard(this,g); //draw plants card
-        objectDrag.drawPlants(this, g); //draw plants
-        objectDrag.drawPeaList(this,g); //draw pea 
-
-        objectDrag.drawShovel(this, g);
-        
-        object.drawLawnMower(this, g);
-        object.drawZombies(this, g); //draw zombie
-
-        objectDrag.drawSun(this, g); //draw sun from sunflower
-        objectDrag.drawSunFalling(this, g);
-
-        
-        if (object.checkGameOver()){
-
-            g2D.setColor(new Color(0,0,0,150));
-            g2D.fillRect(0, 0, PANEL_WIDTH, PANEL_HEIGHT);
-
-            g2D.setFont(new Font("MV Boli",Font.PLAIN,110));
-            //Shadow
-            g2D.setColor(Color.black);
-            g2D.drawString("Game Over",250,300);
-            //GameOver
-            g2D.setColor(Color.white);
-            g2D.drawString("Game Over",250-4,300-4);
-            //Retry
-            g2D.setFont(new Font("MV Boli",Font.PLAIN,50));
-            g2D.setColor(Color.white);
-            g2D.drawString("Retry",350,400);
-            //Back to the title screen
-            g2D.setColor(Color.white);
-            g2D.drawString("Quit",600,400);   
-            
-            g2D.drawLine(350,0,350,600);
-            g2D.drawLine(490,0,490,600);
-            
-            g2D.drawLine(0,400+10,1066,400+10);
-            g2D.drawLine(0,360,1066,360);
-
-            g2D.drawLine(600,0,600,600);
-            g2D.drawLine(710,0,710,600);
-            
+        switch(GameState.state){
+            case MAIN_MENU:
+                mainMenu.draw(this, g2D,g);
+                break;
+            case PLAYING:
+                playing.draw(this, g2D, g);
+                break;
+            case LEVEL:
+                level.draw(this, g2D, g);
         }
-        //g2D.drawImage(new ImageIcon("shovel.png").getImage(),460,5,null);
+
     }
 
-    //repaint the panel //skip: don't care this method
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        //x -= xVelocity;
-        repaint(); 
-    }
-
-
-    //Control by mouse
-    private class ClickListener extends MouseAdapter{
-        // press the mouse in the card contain
-        public void mouseClicked(MouseEvent e){
-            if (!object.checkGameOver()){
-                objectDrag.updateSunCard(e,objectDrag.getSunList());
-                objectDrag.updateSunCard(e,objectDrag.getSunFallingList());
-            }
-            else{
-                if (e.getY() >= 360 && e.getY() <= 410){
-                    //click "retry"
-                    if (e.getX() >= 350 && e.getX() <= 490){
-                        objectDrag.reset();
-                        object.reset();                        
-                    }
-                    //click "quit"
-                    if (e.getX() >= 600 && e.getX() <= 710){
-
-                    }
-                }
-            }
-        }
-
-        public void mousePressed(MouseEvent e){
-            if (!object.checkGameOver()){
-                prePt = e.getPoint();
-                if (card.qualifiedPositionCard(e)[1] == 1 && check1 == 0){ //check the mouse can click the card properly
-                    if (objectDrag.getSunValue() >= objectDrag.getPlantsCardList().get(card.qualifiedPositionCard(e)[0]).getPlantsValue()){
-                        if (!objectDrag.getPlantsCardList().get(card.qualifiedPositionCard(e)[0]).getCheckDelay()){
-                            check2 = card.qualifiedPositionCard(e)[0]; //get position of the specific card in the card list
-                            check1++; //purpose: to make sure to click only 1 card
-                        }
-                    }
-                }
-                if (objectDrag.getShovel().checkShovel(e)){
-                    check2 = 8;
-                }
-            }
-        }
-        public void mouseReleased(MouseEvent e){
-            if (!object.checkGameOver()){
-                if (check2 >= 0 && check2 < 8){
-                    if (backyard.qualifiedPositionBackyard(e)[2] != 1){ //check the mouse are placed in the proper area to place the plants in the backyard
-                        objectDrag.getPlantsCardList().get(check2).setImageCorner(new Point((int)ObjectDrag.plantsCardList.get(check2).imageFirstPoint.getX(),(int)ObjectDrag.plantsCardList.get(check2).imageFirstPoint.getY()));
-                        // a card is forced to move back to card list because the mouse place in area improperly to place plants 
-                    }
-                    else{
-                        if (backyard.getAvailableCoordinate()[backyard.qualifiedPositionBackyard(e)[3]][backyard.qualifiedPositionBackyard(e)[4]] == 0){
-                            backyard.getAvailableCoordinate()[backyard.qualifiedPositionBackyard(e)[3]][backyard.qualifiedPositionBackyard(e)[4]]++;
-                            int a = objectDrag.getPlantsCardList().get(check2).getImage().getIconWidth();
-                            int b = objectDrag.getPlantsCardList().get(check2).getImage().getIconHeight();
-                            // get coordinate to place the plants
-                            objectDrag.getPlantsCardList().get(check2).setImageCorner(new Point(backyard.qualifiedPositionBackyard(e)[0]-a/2,backyard.qualifiedPositionBackyard(e)[1]-b));
-                            objectDrag.getPlantsCardList().get(check2).setXBackyard(backyard.qualifiedPositionBackyard(e)[0]);
-                            objectDrag.getPlantsCardList().get(check2).setYBackyard(backyard.qualifiedPositionBackyard(e)[1]);
-                            objectDrag.getPlantsCardList().get(check2).check++; //set card are available to create a new plant
-
-                            objectDrag.getPlantsCardList().get(check2).setCheckDelay(true);
-
-                            objectDrag.updateSunValue(objectDrag.getPlantsCardList().get(check2).getPlantsValue());
-                        }
-                        else
-                            objectDrag.getPlantsCardList().get(check2).setImageCorner(new Point((int)ObjectDrag.plantsCardList.get(check2).imageFirstPoint.getX(),(int)ObjectDrag.plantsCardList.get(check2).imageFirstPoint.getY()));
-                    }
-                }
-                else if (check2 == 8){
-                    if (backyard.qualifiedPositionBackyard(e)[2] == 1){ //check the mouse are placed in the proper area to place the plants in the backyard
-                        if (backyard.getAvailableCoordinate()[backyard.qualifiedPositionBackyard(e)[3]][backyard.qualifiedPositionBackyard(e)[4]] == 1){
-                            objectDrag.updateShovel(new Point(backyard.qualifiedPositionBackyard(e)[0],backyard.qualifiedPositionBackyard(e)[1]));
-                            backyard.getAvailableCoordinate()[backyard.qualifiedPositionBackyard(e)[3]][backyard.qualifiedPositionBackyard(e)[4]]--;
-                        }
-                        // a card is forced to move back to card list because the mouse place in area improperly to place plants 
-                    }
-                    objectDrag.getShovel().setImageCorner(new Point((int) objectDrag.getShovel().getImageFirstPoint().getX(),(int) objectDrag.getShovel().getImageFirstPoint().getY()));    
-                }
-                check1 = 0;
-                check2 = -1;
-            }
-        }
-        
-    }
-    //drag the image by mouse
-    private class DragListener extends MouseMotionAdapter{
-        public void mouseDragged(MouseEvent e){
-            if (!object.checkGameOver()){
-                if (check2 >= 0 && check2 < 8){
-                    //if (objectDrag.getSunValue() >= objectDrag.getPlantsList().get(check2).getPlantsValue()){
-                    Point currentPt = e.getPoint();
-                    // get new coordinate by using displacement between the current and the previous mouse
-                    objectDrag.getPlantsCardList().get(check2).getImageCorner().translate((int)(currentPt.getX()-prePt.getX()),(int)(currentPt.getY()-prePt.getY()));
-                    prePt = currentPt;
-                    repaint(); //repaint in a loop of game
-                
-                }
-                else if (check2 == 8){
-                    Point currentPt = e.getPoint();
-                    // get new coordinate by using displacement between the current and the previous mouse
-                    objectDrag.getShovel().getImageCorner().translate((int)(currentPt.getX()-prePt.getX()),(int)(currentPt.getY()-prePt.getY()));
-                    prePt = currentPt;
-                    repaint(); //repaint in a loop of game
-                }
-            }  
-        }
-    }
-    
     // program to create a loop of game
-    private Thread gameThread;
-    int FPS = 50; // frame per second
     public void startGameThread(){
         gameThread = new Thread(this);//instantiate a thread //passing GamePanel to thread's constructor 
         gameThread.start(); //let start a thread //automatically call run method
     }
 
-    public void update(){
-        if (!object.checkGameOver()){
-            objectDrag.updatePeaList(); //update motion of pea of each peashooter
-            object.updateLawnMower();
-            object.updateZombies(); //update motion of each zombies
-            object.checkCollision(objectDrag.getPlantsList(), objectDrag.getPeaUpdateList()); //check collision between objects (zombies vs pea and zombies vs plants)
-            objectDrag.updateSunList();
-            objectDrag.updateSunFalling();
-            object.setAvailableCoordinate(backyard);
-            object.updateTestZombies(1, 15,15);
-        }
-    }
     @Override
     public void run() {
         double drawInterval = 1000000000/FPS;
@@ -326,8 +138,89 @@ public class GamePanel extends JPanel implements ActionListener,Runnable{
         }
     }
 
-    public int getSunValue(){
-        return objectDrag.getSunValue();
+    //repaint the panel //skip: don't care this method 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        repaint(); 
     }
+
+    private class ClickListener extends MouseAdapter{
+        public void mouseClicked(MouseEvent e){
+            switch(GameState.state){
+                case MAIN_MENU:
+                    mainMenu.mouseClicked(e);
+                    break;
+                case PLAYING:
+                    playing.mouseClicked(e);
+                    break;
+                case LEVEL:
+                    break;
+            }
+        }
+
+        public void mousePressed(MouseEvent e){
+            switch(GameState.state){
+                case MAIN_MENU:
+                    mainMenu.mousePressed(e);
+                    break;
+                case PLAYING:
+                    playing.mousePressed(e);
+                    break;
+                case LEVEL:
+                    level.mousePressed(e);
+                    break;
+            }            
+
+        }
+        public void mouseReleased(MouseEvent e){
+            switch(GameState.state){
+                case MAIN_MENU:
+                    mainMenu.mouseReleased(e);
+                    break;
+                case PLAYING:
+                    playing.mouseReleased(e);
+                    break;
+                case LEVEL:
+                    level.mouseReleased(e);
+                    break;
+            }
+        }
+        
+    }
+    private class DragListener extends MouseMotionAdapter{
+        public void mouseMoved(MouseEvent e){
+            switch(GameState.state){
+                case MAIN_MENU:
+                    mainMenu.mouseMoved(e);
+                    break;
+                case PLAYING:
+                    playing.mouseMoved(e);
+                    break;
+                case LEVEL:
+                    level.mouseMoved(e);
+                    break;
+            }
+        }
+
+        public void mouseDragged(MouseEvent e){
+            switch(GameState.state){
+                case MAIN_MENU:
+                    mainMenu.mouseDragged(e);
+                    break;
+                case PLAYING:
+                    playing.mouseDragged(e);
+                    break;            
+            }
+        }
+    }
+     
+    public AudioPlayer getAudioPlayer(){
+        return audioPlayer;
+    }
+
+    public AudioOptions getAudioOptions(){
+        return audioOptions;
+    }
+
 
 }

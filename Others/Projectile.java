@@ -3,18 +3,18 @@ package Others;
 import java.awt.geom.Rectangle2D;
 
 public class Projectile {
-    private Rectangle2D.Float hitBox;
+    private Rectangle2D.Double hitBox;
     private boolean imageActive = true;
     
-    private int speed;
+    private double speed;
     
     private int xBackyard;
     private int yBackyard;
-    private int xCoordinate;
-    private int yCoordinate;
+    private double xCoordinate;
+    private double yCoordinate;
 
-    public Projectile(int x, int y,int speed,int width,int height,int xBackyard,int yBackyard){
-        hitBox = new Rectangle2D.Float(x,y,width,height);
+    public Projectile(double x, double y,double speed,int width,int height,int xBackyard,int yBackyard){
+        hitBox = new Rectangle2D.Double(x,y,width,height);
         this.speed = speed;
         this.xBackyard = xBackyard;
         this.yBackyard = yBackyard;
@@ -25,20 +25,24 @@ public class Projectile {
         hitBox.x += speed;
     }
 
-    public int getSpeed(){
+    public double getSpeed(){
         return speed;
     }
 
-    public void setSpeed(int speed){
+    public void setSpeed(double speed){
         this.speed = speed;
     }
 
-    public void setPos(int x,int y){
+    public void setPos(double x,double y){
         hitBox.x = x;
         hitBox.y = y;
     }
 
-    public Rectangle2D.Float getHitBox(){
+    public void setHitBox(Rectangle2D.Double box){
+        this.hitBox = box;
+    }
+
+    public Rectangle2D.Double getHitBox(){
         return hitBox;
     }
 
@@ -66,15 +70,16 @@ public class Projectile {
         this.yBackyard = yBackyard;
     }
 
-    public int getXCoordinate(){
+    public double getXCoordinate(){
         return xCoordinate;
     }
 
-    public int getYCoordinate(){
+    public double getYCoordinate(){
         return yCoordinate;
     }
 
-    public void setXCoordinate(int x){
+    public void setXCoordinate(double x){
         this.xCoordinate = x;
     }
+
 }

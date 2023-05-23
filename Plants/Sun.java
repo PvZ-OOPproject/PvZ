@@ -5,12 +5,12 @@ import javax.swing.ImageIcon;
 import Others.Projectile;
 
 public class Sun extends Projectile {
-    private int yFirstCoordinate;
-    private int xCoordinate;
-    private int yCoordinate;
-    private static ImageIcon image = new ImageIcon("sun.gif");
+    private double yFirstCoordinate;
+    private double xCoordinate;
+    private double yCoordinate;
+    private static ImageIcon image = new ImageIcon("Image/Others/sun.gif");
 
-    public Sun(int x, int y){
+    public Sun(double x, double y){
         super(x,y,0,image.getIconWidth(),image.getIconHeight(),0,0);
         this.xCoordinate = x;
         this.yCoordinate = y + 40;
@@ -26,23 +26,23 @@ public class Sun extends Projectile {
         return image;
     }
 
-    public void setXCoordinate(int x){
+    public void setXCoordinate(double x){
         this.xCoordinate = x;
     }
 
-    public void setYCoordinate(int y){
+    public void setYCoordinate(double y){
         this.yCoordinate = y;
     }
 
-    public int getXCoordinate(){
+    public double getXCoordinate(){
         return xCoordinate;
     }
 
-    public int getYCoordinate(){
+    public double getYCoordinate(){
         return yCoordinate;
     }
     
-    public int getYFirstCoordinate(){
+    public double getYFirstCoordinate(){
         return yFirstCoordinate;
     }
 
