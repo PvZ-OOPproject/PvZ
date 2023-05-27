@@ -119,7 +119,7 @@ public class Playing extends State implements StateMethods{
             objectDrag.updatePlantsList();
             objectDrag.updatePlantsCard();
             object.setAvailableCoordinate(backyard);
-            //object.updateTestZombies(1,0,5);
+            
 
             if (object.checkGameOver()){
                 panel.getAudioPlayer().stopSong();

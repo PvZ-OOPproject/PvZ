@@ -6,19 +6,15 @@ public class GameFrame extends JFrame {
     
     GamePanel panel;
 
-    JLayeredPane layeredPane;
-
-
     GameFrame(){
 
         panel = new GamePanel();
         
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //set-up the sign "x" as exit
-        //this.setSize(a,640);
+
         this.setResizable(true); // set ability to resize the frame
+        this.setIconImage(new ImageIcon("Image/GUI/pvz_logo.png").getImage());
         this.setTitle("Plants Vs Zombies"); // set title of the frame
-        
-        //this.add(layeredPane);
         
         this.add(panel); // add panel into the frame
         
