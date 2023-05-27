@@ -111,7 +111,6 @@ public class Zombies extends Projectile implements AnimatedImage{
     }
 
     public void updateAudioEffects(AudioPlayer audioPlayer){
-        //System.out.println(audioPlayer.getVolume());
         sound.setVolume(audioPlayer.getVolume());
         if (!audioPlayer.getEffectMute())
             if (isImageActive()){

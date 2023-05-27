@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 
 import utilz.LoadSave;
 
-public class VolumeButton extends PauseButton {
+public class VolumeButton extends PauseButton implements Button{
 
 	private BufferedImage[] imgs;
 	private BufferedImage slider;
@@ -27,7 +27,7 @@ public class VolumeButton extends PauseButton {
 	}
 
 	private void loadImgs() {
-		BufferedImage temp = LoadSave.GetSpriteAtlas("volume_button1.png");
+		BufferedImage temp = LoadSave.getLoadSave().GetSpriteAtlas("volume_button1.png");
 		imgs = new BufferedImage[3];
 		for (int i = 0; i < imgs.length; i++)
 			imgs[i] = temp.getSubimage(i * 22, 0, 22, height);

@@ -59,25 +59,6 @@ public class ObjectStable {
 
     }
     
-
-    //update zombies in this round
-    /*public void updateZombiesBackyard(){
-        for(int i=0; i < numZombies;i++){
-            //int j = random.nextInt(4);
-            int j = 1;
-            switch(j){
-                case 1:{
-                    zombiesList.add(new Zombie_normal(-1, 200, 1000+random.nextInt(1), i*100,1000,130 + i*100));
-                    zombiesList.add(new Zombie_normal(-1, 200, 2200+random.nextInt(400), i*100,1000,130 + i*100));
-                    zombiesList.add(new Zombie_normal(-1, 200, 2200+random.nextInt(400), i*100,1000,130 + i*100));
-                    //zombiesList.add(new Zombie_normal(-1, 200, 1000+random.nextInt(400), i*100));
-                    //zombiesList.add(new Zombie_normal(-1, 200, 1000+random.nextInt(400), i*100));
-                    break; 
-                }
-            }
-        }
-    }*/
-    
     public void zombiesListName(int i,int j,int z){
         switch(j){
             case 0:{
@@ -256,6 +237,11 @@ public class ObjectStable {
                 if (level == 3)
                     addFinalZombies(numFinal, 5); 
                 checkFinal = true;
+                AudioPlayer sound = new AudioPlayer("wave", 2);
+                sound.setVolume(audioPlayer.getVolume());
+                if (!audioPlayer.getEffectMute()){
+                    sound.playEffect();
+                }  
             }
         }
     }
@@ -290,27 +276,34 @@ public class ObjectStable {
 
     public void drawPercent(Graphics g){
         if (delayZombies >= 200){
-            g.setColor(Color.blue);
             if (zombiesList.size() + n <= numTurn){
-                percent = (int) ((double) 210 * zombiesList.size() / numTurn);
-                if (percent1 <= percent)
-                    percent1 += (double) 1 / 50;
-                g.fillRect(1000 - (int) percent1, 565,(int) percent1 , 25);
-                g.setColor(Color.red);
-                g.fillRect(1000 - 70, 565,10 , 25);
-                g.fillRect(1000 - 140, 565,10 , 25);
-                g.fillRect(1000 - 210, 565,10 , 25);
+                percent = (int) ((double) 210 * (zombiesList.size() + n) / numTurn);
+                if (percent < 210)
+                    if (percent1 <= percent)
+                        percent1 += (double) 1 / 50;
+                else
+                    percent = 210;
                 g.drawImage(new ImageIcon("Image/GUI/bar.png").getImage(),1000-210,565,null);
+                g.setColor(Color.green);
+                g.fillRect(1000 - (int) percent1  + 5, 570,(int) percent1 - 10, 15);
+                g.drawImage(new ImageIcon("Image/GUI/flag.png").getImage(),1000-70,545,null);
+                g.drawImage(new ImageIcon("Image/GUI/flag.png").getImage(),1000-140,545,null);
+                g.drawImage(new ImageIcon("Image/GUI/flag.png").getImage(),1000-210,545,null);
                 g.drawImage(new ImageIcon("Image/GUI/zom_head.png").getImage(),1000 - (int) percent1 - 20,555,null);
             }
             else{
                 percent = 210;
                 if (percent1 <= percent)
                     percent1 += (double) 1 / 50;
-                if (percent1 > percent)
+                else
                     percent1 = 210;
                 g.fillRect(1000 - (int) percent1, 565, (int) percent1, 25);
                 g.drawImage(new ImageIcon("Image/GUI/bar.png").getImage(),1000-210,565,null);
+                g.setColor(Color.green);
+                g.fillRect(1000 - (int) percent1  + 5, 570,(int) percent1 - 10, 15);
+                g.drawImage(new ImageIcon("Image/GUI/flag.png").getImage(),1000-70,545,null);
+                g.drawImage(new ImageIcon("Image/GUI/flag.png").getImage(),1000-140,545,null);
+                g.drawImage(new ImageIcon("Image/GUI/flag.png").getImage(),1000-210,545,null);
                 g.drawImage(new ImageIcon("Image/GUI/zom_head.png").getImage(),1000 - (int) percent1 - 20,555,null);
             }        
         }

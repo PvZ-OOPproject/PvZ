@@ -13,7 +13,7 @@ public class NewPlant extends Plants{
 
     public NewPlant(int plantDamage, int plantHealth, double x, double y, int xBackyard, int yBackyard) {
 
-        super(plantDamage, plantHealth,x,y,new ImageIcon("Image/Plants/summer_walnut.gif"),new ImageIcon("Image/Cards/summer_walnut_price.png"),"NewPlant",50,xBackyard,yBackyard,new ImageIcon("Image/Cards/summer_walnut_delay.png"),1500);
+        super(plantDamage, plantHealth,x,y,new ImageIcon("Image/Plants/summer_walnut.gif"),new ImageIcon("Image/Cards/summer_walnut_price.png"),"NewPlant",100,xBackyard,yBackyard,new ImageIcon("Image/Cards/summer_walnut_delay.png"),1500);
     
         setSpeed(2);
     }

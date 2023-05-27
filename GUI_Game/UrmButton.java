@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 
 import utilz.LoadSave;
 
-public class UrmButton extends PauseButton{
+public class UrmButton extends PauseButton implements Button{
 	private BufferedImage[] imgs;
     private String image;
 	private int index;
@@ -19,7 +19,7 @@ public class UrmButton extends PauseButton{
 	}
 
 	private void loadImgs(){
-		BufferedImage temp = LoadSave.GetSpriteAtlas(image);
+		BufferedImage temp = LoadSave.getLoadSave().GetSpriteAtlas(image);
 		imgs = new BufferedImage[3];
 		for (int i = 0; i < imgs.length; i++){
 			imgs[i] = temp.getSubimage(i * width, 0, width, height);

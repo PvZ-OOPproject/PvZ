@@ -56,8 +56,6 @@ public class ObjectDrag {
 
     public void update(){
         for(int i=1; i <= 9;i++){
-            //int j = random.nextInt(4);
-            //int j = 2;
             switch(i){
                 case 1:{
                     plantsCardList.add(new PeaShooter(20, 300, 80 + (i-1)*52, 5,40,80 + 26 + (i-1)*52));
@@ -190,7 +188,6 @@ public class ObjectDrag {
                 }
                 else if (i.getName().equals("RandomPlants")){
                     int j = 1 + random.nextInt(10);
-                    //int j = 2;
                     switch(j){
                         case 1, 2, 3:{
                             IceShroom iceShroom = new IceShroom(20, 1800,(int) i.getImageCorner().getX(),(int) i.getImageCorner().getY(), i.getXBackyard(),i.getYBackyard(),audioPlayer);
@@ -222,19 +219,20 @@ public class ObjectDrag {
     public void updateShovel(Point point){
         for(Plants i : plantsList){
             if ( i.getXBackyard() == point.getX() && i.getYBackyard() == point.getY()){
+                if (i.isImageActive()){
+                    if (i.getPlantsValue() % 10 == 0)
+                        updateSunValue(i.getPlantsValue()/2, 2);
+                    else{
+                        updateSunValue((i.getPlantsValue()-5)/2, 2);
+                    }
+                }
                 i.setImageActive(false);
                 for(Pea j : peaUpdateList){
-                    //if ((int) i.getImageFirstPoint().getX() == j.getXFirstCoordinate() && (int) i.getImageFirstPoint().getY() == j.getYFirstCoordinate()){
-                        if (i.getXBackyard() == j.getXBackyard() && i.getYBackyard() == j.getYBackyard()){
-                            if (!j.getStop()){
-                                j.setShootActive(false);
-                                j.setPrepareStop(true);
-                                //j.setStop(true);
-                                //i.getImageFirstPoint().setLocation(-500, -500);
-                              
-                                
-                                //break;
-                            }
+                    if (i.getXBackyard() == j.getXBackyard() && i.getYBackyard() == j.getYBackyard()){
+                        if (!j.getStop()){
+                            j.setShootActive(false);
+                            j.setPrepareStop(true);
+                        }
                     }
                 }
             }
@@ -305,11 +303,15 @@ public class ObjectDrag {
         getPlantsList().clear();
         getSunFallingList().clear();
         getSunList().clear();
-        setSunValue(300);      
+        sunValue = 300;
+        //setSunValue(300);      
     }
 
-    public void updateSunValue(int plantsValue){
-        sunValue -= plantsValue;
+    public void updateSunValue(int plantsValue,int i){
+        if (i == 1)
+            sunValue -= plantsValue;
+        if (i == 2)
+            sunValue += plantsValue;
     }
     
     public void drawSun(GamePanel panel,Graphics g){
@@ -347,9 +349,9 @@ public class ObjectDrag {
         return sunValue;
     }
 
-    public void setSunValue(int sunValue){
+    /*public void setSunValue(int sunValue){
         this.sunValue = sunValue;
-    }
+    }*/
 
     public Shovel getShovel(){
         return shovel;

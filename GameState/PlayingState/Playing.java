@@ -99,7 +99,7 @@ public class Playing extends State implements StateMethods{
         if (!stopState){
             if (level.getLevel() == 1){
                 mainMenu.setCurState(1);
-                object.updateTestZombies(1,15,10);
+                object.updateTestZombies(1,0,10);
             }
             else if (level.getLevel() == 2){
                 mainMenu.setCurState(2);
@@ -224,14 +224,16 @@ public class Playing extends State implements StateMethods{
         menuB.draw(g);
         object.drawPercent(g);
 
-        objectDrag.drawPlantsCard(panel,g); //draw plants card
+        //objectDrag.drawPlantsCard(panel,g); //draw plants card
         objectDrag.drawPlants(panel, g); //draw plants
         objectDrag.drawPeaList(panel,g); //draw pea 
 
         objectDrag.drawShovel(panel, g);
-        
+
         object.drawLawnMower(panel, g);
         object.drawZombies(panel, g); //draw zombie
+
+        objectDrag.drawPlantsCard(panel,g); //draw plants card
 
         objectDrag.drawSun(panel, g); //draw sun from sunflower
         objectDrag.drawSunFalling(panel, g);
@@ -241,7 +243,11 @@ public class Playing extends State implements StateMethods{
         win.draw(panel, g2D,g);
         gameOver.draw(panel, g2D,g);
 
-        if (preparePlay >= 150 && preparePlay < 175){
+        if (preparePlay < 150 && preparePlay != -1){
+            g2D.setColor(new Color(0, 0,0,150));
+            g2D.fillRect(0, 0, 1066, 600);
+        }
+        else if (preparePlay >= 150 && preparePlay < 175){
             g2D.drawImage(new ImageIcon("Image/Others/ready.png").getImage(),378,241,null);
         }else if (preparePlay >= 175 && preparePlay < 200){
             g2D.drawImage(new ImageIcon("Image/Others/set.png").getImage(),378,255,null);
@@ -311,9 +317,9 @@ public class Playing extends State implements StateMethods{
 
                         objectDrag.getPlantsCardList().get(check2).setCheckDelay(true);
 
-                        objectDrag.updateSunValue(objectDrag.getPlantsCardList().get(check2).getPlantsValue());
+                        objectDrag.updateSunValue(objectDrag.getPlantsCardList().get(check2).getPlantsValue(),1);
 
-                        //panel.getAudioPlayer().playEffect(AudioPlayer.PLANTING);
+
                         AudioPlayer sound = new AudioPlayer("planting", 2);
                         sound.setVolume(panel.getAudioPlayer().getVolume());
                         if (!panel.getAudioPlayer().getEffectMute())
@@ -328,6 +334,8 @@ public class Playing extends State implements StateMethods{
                     if (backyard.getAvailableCoordinate()[backyard.qualifiedPositionBackyard(e)[3]][backyard.qualifiedPositionBackyard(e)[4]] == 1){
                         objectDrag.updateShovel(new Point(backyard.qualifiedPositionBackyard(e)[0],backyard.qualifiedPositionBackyard(e)[1]));
                         backyard.getAvailableCoordinate()[backyard.qualifiedPositionBackyard(e)[3]][backyard.qualifiedPositionBackyard(e)[4]]--;
+
+
                         
                         AudioPlayer sound = new AudioPlayer("shovel", 2);
                         sound.setVolume(panel.getAudioPlayer().getVolume());

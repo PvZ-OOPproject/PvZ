@@ -1,5 +1,5 @@
 package Others;
 
 public interface AnimatedImage {
-    void animatedImage();
+    public void animatedImage();
 }

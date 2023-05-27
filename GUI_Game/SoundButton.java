@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 
 import utilz.LoadSave;
 
-public class SoundButton extends PauseButton{
+public class SoundButton extends PauseButton implements Button{
 	private BufferedImage[][] soundImgs;
 	private boolean mouseOver, mousePressed;
 	
@@ -19,7 +19,7 @@ public class SoundButton extends PauseButton{
 	}
 
 	private void loadSoundImgs() {
-		BufferedImage temp = LoadSave.GetSpriteAtlas("sound_button1.png");
+		BufferedImage temp = LoadSave.getLoadSave().GetSpriteAtlas("sound_button1.png");
 		soundImgs = new BufferedImage[2][3];
 		for (int j = 0; j < soundImgs.length; j++)
 			for (int i = 0; i < soundImgs[j].length; i++)

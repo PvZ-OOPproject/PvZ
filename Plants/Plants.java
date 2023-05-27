@@ -7,10 +7,11 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 import Control.GamePanel;
+import Others.AnimatedImage;
 import Others.Projectile;
 import Zombies.Zombies;
 
-public class Plants extends Projectile{
+public class Plants extends Projectile implements AnimatedImage{
     private int plantDamage;
     private int plantHealth;
     protected static int plantCount = 0;
@@ -182,10 +183,6 @@ public class Plants extends Projectile{
     public void setExploreDelay(int delay){
         this.exploreDelay = delay;
     }
-
-    /*public AudioPlayer getAudioPlayer(){
-        return audioPlayer;
-    }*/
 
     public void animatedImage() {
 
