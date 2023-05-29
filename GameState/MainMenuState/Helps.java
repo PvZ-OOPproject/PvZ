@@ -52,8 +52,6 @@ public class Helps implements StateMethods{
                 g.drawImage(new ImageIcon("Image/GUI/letter2.png").getImage(), 111, 28, null); 
             }
 
-            //g.drawImage(new ImageIcon("Image/Others/text.png").getImage(), 123, 280, null);
-
             //draw urm button in helps class
             ok_button.draw(g);
             next_button.draw(g);

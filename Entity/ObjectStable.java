@@ -28,6 +28,7 @@ public class ObjectStable {
 
     private boolean gameOver = false;
     private boolean checkFinal = false;
+    private int finalDelay = 0;
     private int delayZombies = 0;
     private int numTurn;
     private int numFinal;
@@ -235,11 +236,6 @@ public class ObjectStable {
                 if (level == 3)
                     addFinalZombies(numFinal, 5); 
                 checkFinal = true;
-                /*AudioPlayer sound = new AudioPlayer("wave", 2);
-                sound.setVolume(audioPlayer.getVolume());
-                if (!audioPlayer.getEffectMute()){
-                    sound.playEffect();
-                }*/ 
             }
         }
     }
@@ -273,7 +269,7 @@ public class ObjectStable {
     }
 
     public void drawPercent(Graphics g){
-        if (delayZombies >= 200){
+        if (delayZombies >= 200 || checkFinal){
             if (zombiesList.size() + n <= numTurn){
                 percent = (int) ((double) 210 * (zombiesList.size() + n) / numTurn);
                 if (percent < 210)
@@ -305,6 +301,24 @@ public class ObjectStable {
                 g.drawImage(new ImageIcon("Image/GUI/zom_head.png").getImage(),1000 - (int) percent1 - 20,555,null);
             }        
         }
+
+    }
+
+    public void drawFinal(Graphics g){
+        if (checkFinal){
+            finalDelay++;
+            if (finalDelay <= 500 && finalDelay >= 200){
+                g.drawImage(new ImageIcon("Image/Others/text.png").getImage(), 123, 280, null);
+            }
+            if (finalDelay == 200){
+                AudioPlayer sound = new AudioPlayer("wave", 2);
+                sound.setVolume(0.9f);
+                if (!audioPlayer.getEffectMute()){
+                    sound.playEffect();
+                } 
+            }
+
+        }        
     }
 
     public void updateLawnMowerBackyard(){
@@ -431,9 +445,7 @@ public class ObjectStable {
     public boolean checkZombiesLine(ArrayList<Zombies> zombiesList,double x,int y){
         for(Zombies i : zombiesList){
             if (i.isImageActive())
-                if (i.getYBackyard() == y && i.getXCoordinate() <= 1000){
-                    //if (x < i.getXCoordinate())
-                      //  return true; 
+                if (i.getYBackyard() == y && i.getXCoordinate() <= 1000){ 
                     if (x < i.getHitBox().getX() + i.getHitBox().getWidth())
                         return true;
                 }
@@ -449,6 +461,7 @@ public class ObjectStable {
 
         gameOver = false;
         checkFinal = false;
+        finalDelay = 0;
         n = 0;
         percent1 = 0;
         percent = 0;

@@ -196,6 +196,7 @@ public class Playing extends State implements StateMethods{
         menuB.draw(g);
         object.drawPercent(g);
 
+        objectDrag.drawPlantsCard(panel,g); //draw plants card
         objectDrag.drawPlants(panel, g); //draw plants
         objectDrag.drawPeaList(panel,g); //draw pea 
 
@@ -204,10 +205,12 @@ public class Playing extends State implements StateMethods{
         object.drawLawnMower(panel, g);
         object.drawZombies(panel, g); //draw zombie
 
-        objectDrag.drawPlantsCard(panel,g); //draw plants card
-
         objectDrag.drawSun(panel, g); //draw sun from sunflower
         objectDrag.drawSunFalling(panel, g);
+
+        if (!stopState){
+            object.drawFinal(g);
+        }
 
         menu.draw(panel, g);
 
