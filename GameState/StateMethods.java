@@ -1,7 +1,6 @@
 package GameState;
 
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 
 import Control.GamePanel;
@@ -9,7 +8,7 @@ import Control.GamePanel;
 public interface StateMethods {
 	public void update();
 
-	public void draw(GamePanel panel,Graphics2D g2D,Graphics g);
+	public void draw(GamePanel panel,Graphics g);
 
 	public void mouseClicked(MouseEvent e);
 

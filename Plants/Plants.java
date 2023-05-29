@@ -7,15 +7,15 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 import Control.GamePanel;
-import Others.AnimatedImage;
-import Others.Projectile;
+import Entity.AnimatedImage;
+import Entity.Projectile;
 import Zombies.Zombies;
 
 public class Plants extends Projectile implements AnimatedImage{
     private int plantDamage;
     private int plantHealth;
     protected static int plantCount = 0;
-    public String name;
+    private String name;
     private int plantsValue;
 
     protected boolean plantHit = false;
@@ -34,13 +34,11 @@ public class Plants extends Projectile implements AnimatedImage{
     protected boolean explore = false;
 
     private ImageIcon image;
-    public int WIDTH;
-    public int HEIGHT;
-    public ImageIcon cardImage;
+    private ImageIcon cardImage;
     private Point imageCorner;
-    public Point imageFirstPoint;
-    public Point currentPoint;
-    public int check = 0;
+    private Point imageFirstPoint;
+    private Point currentPoint;
+    private int check = 0;
 
     public Plants(int plantDamage,int plantHealth,double x,double y,ImageIcon image,ImageIcon cardImage,String name,int plantsValue,int xBackyard,int yBackyard,ImageIcon imageDelay,int constDelay){
         super(x,y,0,image.getIconWidth(),image.getIconHeight(),xBackyard,yBackyard);
@@ -115,6 +113,10 @@ public class Plants extends Projectile implements AnimatedImage{
         this.imageCorner = point;
     }
 
+    public Point getCurrentPoint(){
+        return currentPoint;
+    }
+
     public void setCurrentPoint(Point point){
         this.currentPoint = point;
     }
@@ -131,7 +133,6 @@ public class Plants extends Projectile implements AnimatedImage{
         if (isImageActive()){
             if (zombies.getName().equals("Gargantuar")){
                 zombies.setEatingDelay(true);
-                System.out.println(zombies.getEatingDelay());
                 if (zombies.getEatingDelay() == 100){
                     plantHealth -= zombies.getDamage();
                 }        
@@ -218,6 +219,14 @@ public class Plants extends Projectile implements AnimatedImage{
 
     public void setFinalDeath(int num){
         this.finalDeath = num;
+    }
+
+    public int getCheck(){
+        return check;
+    }
+
+    public void setCheck(int num){
+        this.check = num;
     }
 
 }

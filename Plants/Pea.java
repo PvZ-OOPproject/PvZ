@@ -2,7 +2,7 @@ package Plants;
 
 import javax.swing.ImageIcon;
 
-import Others.Projectile;
+import Entity.Projectile;
 import Zombies.Zombies;
 
 public class Pea extends Projectile{
@@ -15,10 +15,6 @@ public class Pea extends Projectile{
     private boolean prepareStop = false;
     private ImageIcon image; 
     private String name;
-    //= new ImageIcon("Pea.png");
-    //private static int WIDTH;// = image.getIconWidth();
-    //private static int HEIGHT;
-
 
     public Pea(int damage,double x,double y,int xBackyard,int yBackyard,ImageIcon image,String name){
         super(x,y,850 / (1.425*50),image.getIconWidth(),image.getIconHeight(),xBackyard,yBackyard);

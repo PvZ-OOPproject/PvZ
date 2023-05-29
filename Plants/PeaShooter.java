@@ -4,7 +4,6 @@ import javax.swing.ImageIcon;
 
 
 public class PeaShooter extends Plants {
-    //public ArrayList<Pea> peaList;
     private Pea pea;
    
     public PeaShooter(int plantDamage, int plantHealth,double x,double y,int xBackyard,int yBackyard) {

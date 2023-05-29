@@ -22,18 +22,17 @@ public class PotatoMine extends Plants{
 
     public void draw(GamePanel panel,Graphics g){
         if (isImageActive()){
-            getImage().paintIcon(panel, g ,(int) currentPoint.getX(),(int) currentPoint.getY());
+            getImage().paintIcon(panel, g ,(int) getCurrentPoint().getX(),(int) getCurrentPoint().getY());
         }
         else{
             if (exploreDelay2 >= 0 && exploreDelay2 <= 20){
-                getImage().paintIcon(panel, g ,(int) currentPoint.getX() - 20,(int) currentPoint.getY());
+                getImage().paintIcon(panel, g ,(int) getCurrentPoint().getX() - 20,(int) getCurrentPoint().getY());
             }            
         }
     }
 
     public void explorePlants(ArrayList<Zombies> zombies,ArrayList<Plants> list){
         if (exploreDelay2 >= 0 && exploreDelay2 <= 20){
-            System.out.println(exploreDelay2);
             exploreDelay2++;
         }
         if (this.getExploreDelay() >= 5*50 && !explore){

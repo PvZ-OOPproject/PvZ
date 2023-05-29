@@ -1,4 +1,4 @@
-package Others;
+package Entity;
 
 import javax.swing.ImageIcon;
 
@@ -10,7 +10,7 @@ public class LawnMower extends Projectile{
 
     private boolean run = false;
 
-    static ImageIcon image = new ImageIcon("Image/Others/lawn_mower.gif");
+    private static ImageIcon image = new ImageIcon("Image/Others/lawn_mower.gif");
     private static final int WIDTH = image.getIconWidth();
     private static final int HEIGHT = image.getIconHeight();
 

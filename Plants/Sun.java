@@ -2,7 +2,7 @@ package Plants;
 
 import javax.swing.ImageIcon;
 
-import Others.Projectile;
+import Entity.Projectile;
 
 public class Sun extends Projectile {
     private double yFirstCoordinate;

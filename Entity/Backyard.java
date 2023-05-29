@@ -1,4 +1,4 @@
-package Others;
+package Entity;
 
 import java.awt.event.MouseEvent;
 

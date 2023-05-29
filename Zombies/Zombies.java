@@ -5,8 +5,8 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.ImageIcon;
 
 import Control.AudioPlayer;
-import Others.AnimatedImage;
-import Others.Projectile;
+import Entity.AnimatedImage;
+import Entity.Projectile;
 
 public class Zombies extends Projectile implements AnimatedImage{
     private int zombieDamage;

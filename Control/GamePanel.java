@@ -26,18 +26,15 @@ public class GamePanel extends JPanel implements ActionListener,Runnable{
     private Thread gameThread;
     private int FPS = 50; // frame per second
 
-    State state;
+    //state class
+    private State state;
+    private Playing playing;
+    private MainMenu mainMenu;
+    private Level level;
 
-    Playing playing;
-    
-    MainMenu mainMenu;
-
-    Level level;
-
-    AudioOptions audioOptions;
-
-    AudioPlayer audioPlayer;
-
+    //audio class
+    private AudioOptions audioOptions;
+    private AudioPlayer audioPlayer;
 
     public GamePanel(){
         
@@ -46,29 +43,32 @@ public class GamePanel extends JPanel implements ActionListener,Runnable{
         this.setDoubleBuffered(true); //set true: all the drawing from this component will be done in an offscreen painting buffer
         //in short, enabling this can improve game's rendering performance
         
-        //DragPanel: use mouse to control plants
+        //DragPanel: use mouse to control the game
         ClickListener clickListener = new ClickListener();
         DragListener dragListener = new DragListener();
         this.addMouseListener(clickListener);
         this.addMouseMotionListener(dragListener);
 
-        audioPlayer = new AudioPlayer("song",1);
-        audioPlayer.playSong(0);
+        //play song at the beginning when start the game
+        audioPlayer = new AudioPlayer("song",1); //choose type of audio -> song (type 1) ("song" - to recognize this audio play a song)
+        audioPlayer.playSong(0); //play song in Main Menu
 
+        //the interface options to adjust the volume of the song and the effect sound
         audioOptions = new AudioOptions(audioPlayer,this);
         
-        
-        state = new State(this);
-        level = new Level(this);
-        mainMenu = new MainMenu(this,level);
-        playing = new Playing(this,level,mainMenu);
+        //state class
+        state = new State(this); // superclass of below state class
+        level = new Level(this); //level state
+        mainMenu = new MainMenu(this,level); //main menu state
+        playing = new Playing(this,level,mainMenu); // playing state
     
-        // run a loop of game
+        // method to run a loop of game
         startGameThread(); 
 
     }
 
     public void update(){
+        //update in each state class
         switch (GameState.state){
             case MAIN_MENU:{
                 mainMenu.update();
@@ -89,17 +89,17 @@ public class GamePanel extends JPanel implements ActionListener,Runnable{
         
         super.paint(g); //paint background
 
-        Graphics2D g2D = (Graphics2D) g;
-
+        //draw in each state
         switch(GameState.state){
             case MAIN_MENU:
-                mainMenu.draw(this, g2D,g);
+                mainMenu.draw(this,g);
                 break;
             case PLAYING:
-                playing.draw(this, g2D, g);
+                playing.draw(this, g);
                 break;
             case LEVEL:
-                level.draw(this, g2D, g);
+                level.draw(this, g);
+                break;
         }
 
     }
@@ -141,17 +141,17 @@ public class GamePanel extends JPanel implements ActionListener,Runnable{
     //repaint the panel //skip: don't care this method 
     @Override
     public void actionPerformed(ActionEvent e) {
-        repaint(); 
+        //repaint(); 
     }
 
     private class ClickListener extends MouseAdapter{
+        //mouse click control in each state
         public void mouseClicked(MouseEvent e){
             switch(GameState.state){
                 case MAIN_MENU:
-                    mainMenu.mouseClicked(e);
                     break;
                 case PLAYING:
-                    playing.mouseClicked(e);
+                    playing.mouseClicked(e); //just use to gather the sun
                     break;
                 case LEVEL:
                     break;
@@ -159,6 +159,7 @@ public class GamePanel extends JPanel implements ActionListener,Runnable{
         }
 
         public void mousePressed(MouseEvent e){
+            //mouse press control in each state
             switch(GameState.state){
                 case MAIN_MENU:
                     mainMenu.mousePressed(e);
@@ -173,6 +174,7 @@ public class GamePanel extends JPanel implements ActionListener,Runnable{
 
         }
         public void mouseReleased(MouseEvent e){
+            //mouse release control in each state
             switch(GameState.state){
                 case MAIN_MENU:
                     mainMenu.mouseReleased(e);
@@ -188,6 +190,7 @@ public class GamePanel extends JPanel implements ActionListener,Runnable{
         
     }
     private class DragListener extends MouseMotionAdapter{
+        //mouse that inside the bounded area in each state
         public void mouseMoved(MouseEvent e){
             switch(GameState.state){
                 case MAIN_MENU:
@@ -202,6 +205,7 @@ public class GamePanel extends JPanel implements ActionListener,Runnable{
             }
         }
 
+        //mouse dragged the bounded area in each state
         public void mouseDragged(MouseEvent e){
             switch(GameState.state){
                 case MAIN_MENU:
@@ -209,11 +213,14 @@ public class GamePanel extends JPanel implements ActionListener,Runnable{
                     break;
                 case PLAYING:
                     playing.mouseDragged(e);
+                    break;
+                case LEVEL:
                     break;            
             }
         }
     }
-     
+    
+    //getter method
     public AudioPlayer getAudioPlayer(){
         return audioPlayer;
     }

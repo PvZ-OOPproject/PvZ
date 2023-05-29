@@ -24,9 +24,9 @@ public class DoomShroom extends Plants{
     
     public void draw(GamePanel panel,Graphics g){
         if (isImageActive()){
-            getImage().paintIcon(panel, g ,(int) currentPoint.getX(),(int) currentPoint.getY());
+            getImage().paintIcon(panel, g ,(int) getCurrentPoint().getX(),(int) getCurrentPoint().getY());
             if (exploreDelay2 >= getFinalDeath() + 1 && exploreDelay2 <= getFinalDeath() + 35){
-                g.drawImage(new ImageIcon("Image/Plants/DoomShroomEffect.gif").getImage(),(int) currentPoint.getX() - 10,(int) currentPoint.getY() - 80, null);
+                g.drawImage(new ImageIcon("Image/Plants/DoomShroomEffect.gif").getImage(),(int) getCurrentPoint().getX() - 10,(int) getCurrentPoint().getY() - 80, null);
             }
         }
     }

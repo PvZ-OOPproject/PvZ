@@ -64,7 +64,6 @@ public class AudioOptions extends State{
 			float valueBefore = volumeButton.getFloatValue();
 			volumeButton.changeX(e.getX());
 			float valueAfter = volumeButton.getFloatValue();
-			System.out.println(audioPlayer.getVolume());
 			if (valueBefore != valueAfter){
 				audioPlayer.setVolume(valueAfter);
 			}

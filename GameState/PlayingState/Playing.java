@@ -7,6 +7,10 @@ import javax.swing.ImageIcon;
 
 import Control.AudioPlayer;
 import Control.GamePanel;
+import Entity.Backyard;
+import Entity.Card;
+import Entity.ObjectDrag;
+import Entity.ObjectStable;
 import GUI_Game.PauseButton;
 
 import GUI_Game.UrmButton;
@@ -14,10 +18,6 @@ import GameState.State;
 import GameState.StateMethods;
 import GameState.LevelState.Level;
 import GameState.MainMenuState.MainMenu;
-import Others.Backyard;
-import Others.Card;
-import Others.ObjectDrag;
-import Others.ObjectStable;
 
 public class Playing extends State implements StateMethods{
     
@@ -99,11 +99,11 @@ public class Playing extends State implements StateMethods{
         if (!stopState){
             if (level.getLevel() == 1){
                 mainMenu.setCurState(1);
-                object.updateTestZombies(1,0,10);
+                object.updateTestZombies(1,15,5);
             }
             else if (level.getLevel() == 2){
                 mainMenu.setCurState(2);
-                object.updateTestZombies(2,15,10);
+                object.updateTestZombies(2,30,15);
             }
             else if (level.getLevel() == 3){
                 mainMenu.setCurState(3);
@@ -186,45 +186,16 @@ public class Playing extends State implements StateMethods{
     }
 
     @Override
-    public void draw(GamePanel panel, Graphics2D g2D, Graphics g) {
-        g2D.drawImage(new ImageIcon("Image/Others/backyard.png").getImage(),0,0, null); // draw backyard
+    public void draw(GamePanel panel, Graphics g) {
+        g.drawImage(new ImageIcon("Image/Others/backyard.png").getImage(),0,0, null); // draw backyard
         
-        g2D.setFont(new Font("MV Boli",Font.PLAIN,20));
-        g2D.setColor(Color.BLACK);
-        g2D.drawString(String.valueOf(objectDrag.getSunValue()), 18, 78);
-
-
-        // draw grid to 
-        g2D.setColor(Color.BLACK);
-        g2D.drawLine(0,80,1066,80);
-        g2D.drawLine(0,180,1066,180);
-        g2D.drawLine(0,280,1066,280);
-        g2D.drawLine(0,380,1066,380);
-        g2D.drawLine(0,480,1066,480);
-        g2D.drawLine(0,580,1066,580);
-
-        g2D.drawLine(250,0,250,600);
-        g2D.drawLine(330,0,330,600);
-        g2D.drawLine(410,0,410,600);
-        g2D.drawLine(490,0,490,600);
-        g2D.drawLine(570,0,570,600);
-        g2D.drawLine(650,0,650,600);
-        g2D.drawLine(730,0,730,600);
-        g2D.drawLine(810,0,810,600);
-        g2D.drawLine(890,0,890,600);
-        g2D.drawLine(970,0,970,600);
-
-        g2D.drawLine(80,0,80,600);
-        g2D.drawLine(440,0,440,600);
-        g2D.drawLine(0,75,1066,75);
-
-        g2D.drawLine(730-52,0,730-52,600);
-        g2D.drawLine(730+52,0,730+52,600);
+        g.setFont(new Font("MV Boli",Font.PLAIN,20));
+        g.setColor(Color.BLACK);
+        g.drawString(String.valueOf(objectDrag.getSunValue()), 18, 78);
        
         menuB.draw(g);
         object.drawPercent(g);
 
-        //objectDrag.drawPlantsCard(panel,g); //draw plants card
         objectDrag.drawPlants(panel, g); //draw plants
         objectDrag.drawPeaList(panel,g); //draw pea 
 
@@ -238,21 +209,21 @@ public class Playing extends State implements StateMethods{
         objectDrag.drawSun(panel, g); //draw sun from sunflower
         objectDrag.drawSunFalling(panel, g);
 
-        menu.draw(panel, g2D, g);
+        menu.draw(panel, g);
 
-        win.draw(panel, g2D,g);
-        gameOver.draw(panel, g2D,g);
+        win.draw(panel,g);
+        gameOver.draw(panel,g);
 
         if (preparePlay < 150 && preparePlay != -1){
-            g2D.setColor(new Color(0, 0,0,150));
-            g2D.fillRect(0, 0, 1066, 600);
+            g.setColor(new Color(0, 0,0,150));
+            g.fillRect(0, 0, 1066, 600);
         }
         else if (preparePlay >= 150 && preparePlay < 175){
-            g2D.drawImage(new ImageIcon("Image/Others/ready.png").getImage(),378,241,null);
+            g.drawImage(new ImageIcon("Image/Others/ready.png").getImage(),378,241,null);
         }else if (preparePlay >= 175 && preparePlay < 200){
-            g2D.drawImage(new ImageIcon("Image/Others/set.png").getImage(),378,255,null);
+            g.drawImage(new ImageIcon("Image/Others/set.png").getImage(),378,255,null);
         }else if (preparePlay >= 200 && preparePlay < 225){
-            g2D.drawImage(new ImageIcon("Image/Others/plant.png").getImage(),378,235,null);
+            g.drawImage(new ImageIcon("Image/Others/plant.png").getImage(),378,235,null);
         }
     }
 
@@ -301,7 +272,7 @@ public class Playing extends State implements StateMethods{
         if (!stopState){
             if (check2 >= 0 && check2 < 10){
                 if (backyard.qualifiedPositionBackyard(e)[2] != 1){ //check the mouse are placed in the proper area to place the plants in the backyard
-                    objectDrag.getPlantsCardList().get(check2).setImageCorner(new Point((int)ObjectDrag.plantsCardList.get(check2).imageFirstPoint.getX(),(int)ObjectDrag.plantsCardList.get(check2).imageFirstPoint.getY()));
+                    objectDrag.getPlantsCardList().get(check2).setImageCorner(new Point((int) objectDrag.getPlantsCardList().get(check2).getImageFirstPoint().getX(),(int) objectDrag.getPlantsCardList().get(check2).getImageFirstPoint().getY()));
                     // a card is forced to move back to card list because the mouse place in area improperly to place plants 
                 }
                 else{
@@ -313,7 +284,7 @@ public class Playing extends State implements StateMethods{
                         objectDrag.getPlantsCardList().get(check2).setImageCorner(new Point(backyard.qualifiedPositionBackyard(e)[0]-a/2,backyard.qualifiedPositionBackyard(e)[1]-3*b/4));
                         objectDrag.getPlantsCardList().get(check2).setXBackyard(backyard.qualifiedPositionBackyard(e)[0]);
                         objectDrag.getPlantsCardList().get(check2).setYBackyard(backyard.qualifiedPositionBackyard(e)[1]);
-                        objectDrag.getPlantsCardList().get(check2).check++; //set card are available to create a new plant
+                        objectDrag.getPlantsCardList().get(check2).setCheck(objectDrag.getPlantsCardList().get(check2).getCheck() + 1); //set card are available to create a new plant
 
                         objectDrag.getPlantsCardList().get(check2).setCheckDelay(true);
 
@@ -326,7 +297,7 @@ public class Playing extends State implements StateMethods{
                             sound.playEffect();
                     }
                     else
-                        objectDrag.getPlantsCardList().get(check2).setImageCorner(new Point((int)ObjectDrag.plantsCardList.get(check2).imageFirstPoint.getX(),(int)ObjectDrag.plantsCardList.get(check2).imageFirstPoint.getY()));
+                        objectDrag.getPlantsCardList().get(check2).setImageCorner(new Point((int) objectDrag.getPlantsCardList().get(check2).getImageFirstPoint().getX(),(int) objectDrag.getPlantsCardList().get(check2).getImageFirstPoint().getY()));
                 }
             }
             else if (check2 == 10){

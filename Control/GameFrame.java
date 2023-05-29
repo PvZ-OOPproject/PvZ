@@ -12,7 +12,7 @@ public class GameFrame extends JFrame {
         
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //set-up the sign "x" as exit
 
-        this.setResizable(true); // set ability to resize the frame
+        this.setResizable(false); // set ability to resize the frame
         this.setIconImage(new ImageIcon("Image/GUI/pvz_logo.png").getImage());
         this.setTitle("Plants Vs Zombies"); // set title of the frame
         
@@ -22,7 +22,7 @@ public class GameFrame extends JFrame {
 
         this.setLocationRelativeTo(null); //set frame in the center of the screen
         this.setVisible(true); //set visible of the frame
-        this.setLayout(null);
+        this.setLayout(null); //set null 
     }
 
 }

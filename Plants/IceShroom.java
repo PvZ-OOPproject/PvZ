@@ -25,7 +25,7 @@ public class IceShroom extends Plants{
 
     public void draw(GamePanel panel,Graphics g){
         if (isImageActive()){
-            getImage().paintIcon(panel, g ,(int) currentPoint.getX(),(int) currentPoint.getY());
+            getImage().paintIcon(panel, g ,(int) getCurrentPoint().getX(),(int) getCurrentPoint().getY());
         }
         else{
             if (exploreDelay2 >= 0 && exploreDelay2 <= 150){

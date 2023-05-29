@@ -14,13 +14,13 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 
 public class AudioPlayer {
-	private Clip effects;
-    private Clip[] songs;
+	private Clip effects; //effect sound
+    private Clip[] songs; //list of song
 
-	private int currentSongId;
-	private float volume = 0.5f;
-	private boolean songMute, effectMute;
-    private int type;
+	private int currentSongId; //current song in a list song
+	private float volume = 0.5f; //volume of sound
+	private boolean songMute, effectMute; //state of mute
+    private int type; //type to choose between song (1) or effect sound (2)
 
 	public AudioPlayer(String name,int type) {
         if (type == 1)

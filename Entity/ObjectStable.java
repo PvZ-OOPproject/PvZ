@@ -1,4 +1,4 @@
-package Others;
+package Entity;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -20,22 +20,22 @@ import Zombies.Zombie_normal;
 import Zombies.Zombies;
 
 public class ObjectStable {
-    public static ArrayList<Zombies> zombiesList;
-    public static ArrayList<LawnMower> lawnMowersList;
-    public static ArrayList<Plants> removeList;
+    private static ArrayList<Zombies> zombiesList;
+    private static ArrayList<LawnMower> lawnMowersList;
+    private static ArrayList<Plants> removeList;
 
-    public static ArrayList<AudioPlayer> audioList;
+    private static ArrayList<AudioPlayer> audioList;
 
-    public boolean gameOver = false;
-    public boolean checkFinal = false;
+    private boolean gameOver = false;
+    private boolean checkFinal = false;
     private int delayZombies = 0;
     private int numTurn;
     private int numFinal;
     private int[] list1 = new int[3];
     private int percent = 0;
     private double percent1 = 0;
-    //private int turn;
-    Random random;
+
+    private Random random;
 
     private int n = 0;
 
@@ -50,9 +50,7 @@ public class ObjectStable {
         audioList = new ArrayList<>();
 
         random = new Random();
-        //updateZombiesBackyard();
         updateLawnMowerBackyard();
-        //updateTestZombies(1, 16);
 
         this.audioPlayer = audioPlayer;
 
@@ -193,26 +191,26 @@ public class ObjectStable {
                 }
                 else if (zombiesList.size() + n < 3){
                     if (readyToAddZombies())
-                        addTurnZombies(1,3, 0, 2);                   
+                        addTurnZombies(1,2, 0, 0);                   
                 }
                 else if (zombiesList.size() + n >= 3 && zombiesList.size() + n < list[0]){
                     if (readyToAddZombies()){
                         if (level == 1)
-                            addTurnZombies(1,2, 0, 0);
+                            addTurnZombies(1,3, 0, 2);
                         if (level == 2)
-                            addTurnZombies(1,2, 0, 1);
+                            addTurnZombies(1,4, 0, 2);
                         if (level == 3)
-                            addTurnZombies(2,5, 0, 3);
+                            addTurnZombies(2,4, 0, 3);
                     }
                 }
                 else if (zombiesList.size() + n >= list[0] && zombiesList.size() + n < list[1] + list[0]){
                     if (readyToAddZombies()){
                         if (level == 1)
-                            addTurnZombies(1,3, 0, 1);
+                            addTurnZombies(1,3, 1, 2);
                         if (level == 2)
-                            addTurnZombies(1,3, 0, 2);
+                            addTurnZombies(1,4, 1, 3);
                         if (level == 3)
-                            addTurnZombies(3,5, 2, 3);
+                            addTurnZombies(3,5, 1, 4);
                     }
                 }
                 else if (zombiesList.size() + n >= list[1] + list[0] && zombiesList.size()  + n< numTurn){
@@ -220,9 +218,9 @@ public class ObjectStable {
                         if (level == 1)
                             addTurnZombies(2,4, 0, 2);
                         if (level == 2)
-                            addTurnZombies(2,4, 0, 3);
+                            addTurnZombies(2,5, 0, 3);
                         if (level == 3)
-                            addTurnZombies(3,5, 2, 4);
+                            addTurnZombies(3,5, 0, 4);
                     }
                 }
 
@@ -237,11 +235,11 @@ public class ObjectStable {
                 if (level == 3)
                     addFinalZombies(numFinal, 5); 
                 checkFinal = true;
-                AudioPlayer sound = new AudioPlayer("wave", 2);
+                /*AudioPlayer sound = new AudioPlayer("wave", 2);
                 sound.setVolume(audioPlayer.getVolume());
                 if (!audioPlayer.getEffectMute()){
                     sound.playEffect();
-                }  
+                }*/ 
             }
         }
     }
@@ -347,7 +345,6 @@ public class ObjectStable {
     public void updateZombies(Playing playing){
         for(Zombies i : zombiesList){
             i.update();
-            //i.updateAudioEffects(audioPlayer,playing);
             if (i.getHealth() <= 0){
                 i.setImageActive(false);
             }

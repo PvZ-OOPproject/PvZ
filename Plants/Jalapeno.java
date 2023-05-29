@@ -23,11 +23,11 @@ public class Jalapeno extends Plants{
 
     public void draw(GamePanel panel,Graphics g){
         if (isImageActive()){
-            getImage().paintIcon(panel, g ,(int) currentPoint.getX(),(int) currentPoint.getY());
+            getImage().paintIcon(panel, g ,(int) getCurrentPoint().getX(),(int) getCurrentPoint().getY());
         }
         else{
             if (exploreDelay2 >= getFinalDeath() + 1 && exploreDelay2 <= getFinalDeath() + 100){
-                g.drawImage(new ImageIcon("Image/Plants/fire.gif").getImage(),270,(int) currentPoint.getY() + 60, null);
+                g.drawImage(new ImageIcon("Image/Plants/fire.gif").getImage(),270,(int) getCurrentPoint().getY() + 60, null);
             }            
         }
     }

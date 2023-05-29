@@ -1,41 +1,24 @@
-package Others;
+package Entity;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Random;
 
-import Control.AudioPlayer;
-import Control.GamePanel;
-
-
-import Plants.CherryBomb;
-import Plants.DoomShroom;
-import Plants.DoublePeaShooter;
-import Plants.IcePeaShooter;
-import Plants.IceShroom;
-import Plants.Jalapeno;
-import Plants.NewPlant;
-import Plants.Pea;
-import Plants.PeaShooter;
-import Plants.Plants;
-import Plants.PotatoMine;
-import Plants.RandomPlants;
-import Plants.Sun;
-import Plants.SunFlower;
-import Plants.Walnut;
+import Control.*;
+import Plants.*;
 
 public class ObjectDrag {
-    public static ArrayList<Plants> plantsCardList;
-    public static ArrayList<Plants> plantsList;
-    public static ArrayList<Pea> peaUpdateList;
-    public static ArrayList<SunFlower> sunFlowerList;
-    public static ArrayList<Sun> sunUpdateList;
-    public static ArrayList<Sun> sunFallingUpdateList;
+    private static ArrayList<Plants> plantsCardList;
+    private static ArrayList<Plants> plantsList;
+    private static ArrayList<Pea> peaUpdateList;
+    private static ArrayList<SunFlower> sunFlowerList;
+    private static ArrayList<Sun> sunUpdateList;
+    private static ArrayList<Sun> sunFallingUpdateList;
     private int sunValue = 300;
     private int delaySunFalling = 400;
-    Shovel shovel;
-    Random random;
+    private Shovel shovel;
+    private Random random;
 
     private AudioPlayer audioPlayer;
 
@@ -122,7 +105,7 @@ public class ObjectDrag {
 
     public void updatePlantsCard(){
         for(Plants i : plantsCardList){
-            if (i.check == 0){
+            if (i.getCheck() == 0){
                 if (i.getCheckDelay()){
                     i.setDelay(i.getDelay()+1);
                     if (i.getDelay() == i.getConstDelay()){
@@ -136,7 +119,7 @@ public class ObjectDrag {
 
     public void drawPlantsCard(GamePanel panel,Graphics g){
         for(Plants i : plantsCardList){
-            if (i.check == 0)
+            if (i.getCheck() == 0)
                 if (!i.getCheckDelay())
                     if (this.getSunValue() >= i.getPlantsValue())
                         i.getCardImage().paintIcon(panel, g ,(int) i.getImageCorner().getX(),(int) i.getImageCorner().getY());
@@ -207,9 +190,9 @@ public class ObjectDrag {
                     }
                 }                         
 
-                i.currentPoint = new Point((int)i.getImageCorner().getX(),(int)i.getImageCorner().getY());
-                i.setImageCorner(new Point((int)i.imageFirstPoint.getX(),(int)i.imageFirstPoint.getY()));
-                i.check--;
+                i.setCurrentPoint(new Point((int)i.getImageCorner().getX(),(int)i.getImageCorner().getY()));
+                i.setImageCorner(new Point((int)i.getImageFirstPoint().getX(),(int)i.getImageFirstPoint().getY()));
+                i.setCheck(i.getCheck() - 1);
             }
 
         }
@@ -349,13 +332,8 @@ public class ObjectDrag {
         return sunValue;
     }
 
-    /*public void setSunValue(int sunValue){
-        this.sunValue = sunValue;
-    }*/
-
     public Shovel getShovel(){
         return shovel;
     }
-
 
 }

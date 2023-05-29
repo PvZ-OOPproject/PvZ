@@ -2,7 +2,6 @@ package GameState.PlayingState;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 
 import java.awt.event.MouseEvent;
 
@@ -17,8 +16,9 @@ import GameState.GameState;
 
 
 public class Win implements StateMethods{
-    private boolean winState = false;
-    private int winDelay = 0;
+    private boolean winState = false; //check the helps state active int the Playing
+
+    private int winDelay = 0;//delay time to appear effect of win
 
     private Playing playing;
 
@@ -31,76 +31,60 @@ public class Win implements StateMethods{
     }
 
     private void createUrmButtons(){
-    
+        //create urm button
         menuB = new UrmButton( 325, 250 * 2, 156, 39,"menu_button_2.png");
         nextLevel = new UrmButton( 605, 250 * 2, 156, 39,"next_level_button_2.png");
     }
 
     public void update() {
-        if (winState){
-            if (winDelay <= 500)
-                winDelay++;
+        //if win are true => the time will delay for 300 (6s) to show the effect of win
+        if (winDelay <= 500)
+            winDelay++;
 
-            menuB.update();
-            nextLevel.update();
-        }
+        //update urm button
+        menuB.update();
+        nextLevel.update();
     }
 
 
-    public void draw1(GamePanel panel,Graphics2D g2D){
-        g2D.setColor(new Color(255,255,255,winDelay));
-        g2D.fillRect(0, 0, 1066, 600);
+    public void draw1(GamePanel panel,Graphics g){
+        //draw turning white
+        g.setColor(new Color(255,255,255,winDelay));
+        g.fillRect(0, 0, 1066, 600);
     }
 
-    public void draw2(GamePanel panel,Graphics2D g2D,Graphics g){
-        g2D.setColor(Color.black);
-        g2D.fillRect(0, 0, 1066, 600);
+    public void draw2(GamePanel panel,Graphics g){
+        
+        g.setColor(Color.black);
+        g.fillRect(0, 0, 1066, 600);
 
-        g2D.drawImage(new ImageIcon("Image/GUI/win_bg.gif").getImage(),0,0,null);
+        g.drawImage(new ImageIcon("Image/GUI/win_bg.gif").getImage(),0,0,null);
 
+        //draw urm button
         menuB.draw(g);
         nextLevel.draw(g);
 
         if (winDelay <= 500){
-            g2D.setColor(new Color(255,255,255,250*2 - winDelay));
-            g2D.fillRect(0, 0, 1066, 600);
+            g.setColor(new Color(255,255,255,250*2 - winDelay));
+            g.fillRect(0, 0, 1066, 600);
         }
     }
 
-    public void setWinDelay(int delay){
-        this.winDelay = delay;
-    }
-
-    public int getWinDelay(){
-        return winDelay;
-    }
-
-    public boolean getWinState(){
-        return winState;
-    }
-
-    public void setWinState(boolean active){
-        this.winState = active;
-    }
-
     @Override
-    public void draw(GamePanel panel, Graphics2D g2D, Graphics g) {
+    public void draw(GamePanel panel, Graphics g) {
         if (winState){
             if (winDelay >= 0 && winDelay <= 250){
-                draw1(panel, g2D);
+                draw1(panel, g);
             }
             else if (winDelay > 250){
-                draw2(panel, g2D,g);
+                draw2(panel,g);
             }
         }
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        /*if (updateMainMenu(e)){
-            playing.setGameState(GameState.MAIN_MENU);
-            playing.reset();
-        }*/
+
     }
 
     @Override
@@ -164,5 +148,20 @@ public class Win implements StateMethods{
     private boolean isIn(MouseEvent e, PauseButton b) {
 		return b.getBounds().contains(e.getX(), e.getY());
 	}
+    
+    public void setWinDelay(int delay){
+        this.winDelay = delay;
+    }
 
+    public int getWinDelay(){
+        return winDelay;
+    }
+
+    public boolean getWinState(){
+        return winState;
+    }
+
+    public void setWinState(boolean active){
+        this.winState = active;
+    }
 }
