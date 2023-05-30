@@ -15,10 +15,12 @@ public class ObjectDrag {
     private static ArrayList<SunFlower> sunFlowerList;
     private static ArrayList<Sun> sunUpdateList;
     private static ArrayList<Sun> sunFallingUpdateList;
-    private int sunValue = 300;
+    private int sunValue = 500;
     private int delaySunFalling = 400;
     private Shovel shovel;
     private Random random;
+
+    private int choice = 0;
 
     private AudioPlayer audioPlayer;
 
@@ -170,19 +172,23 @@ public class ObjectDrag {
                     plantsList.add(newPlant);
                 }
                 else if (i.getName().equals("RandomPlants")){
-                    int j = 1 + random.nextInt(10);
-                    switch(j){
-                        case 1, 2, 3:{
+                    //int j = 1 + random.nextInt(10);
+                    choice++;
+                    if (choice == 3){
+                        choice = 0;
+                    }
+                    switch(choice){
+                        case 0:{
                             IceShroom iceShroom = new IceShroom(20, 1800,(int) i.getImageCorner().getX(),(int) i.getImageCorner().getY(), i.getXBackyard(),i.getYBackyard(),audioPlayer);
                             plantsList.add(iceShroom);
                             break;
                         }
-                        case 4 ,5, 6, 7:{
+                        case 1:{
                             Jalapeno jalapeno = new Jalapeno(1800, 1800,(int) i.getImageCorner().getX(),(int) i.getImageCorner().getY(), i.getXBackyard(),i.getYBackyard(),audioPlayer);
                             plantsList.add(jalapeno);
                             break;
                         }
-                        case 8, 9, 10:{
+                        case 2:{
                             DoomShroom doomShroom = new DoomShroom(1800, 1800,(int) i.getImageCorner().getX(),(int) i.getImageCorner().getY(), i.getXBackyard(),i.getYBackyard(),audioPlayer);
                             plantsList.add(doomShroom);
                             break;
@@ -286,7 +292,7 @@ public class ObjectDrag {
         getPlantsList().clear();
         getSunFallingList().clear();
         getSunList().clear();
-        sunValue = 300;
+        sunValue = 500;
         //setSunValue(300);      
     }
 

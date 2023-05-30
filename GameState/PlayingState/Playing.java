@@ -107,7 +107,7 @@ public class Playing extends State implements StateMethods{
             }
             else if (level.getLevel() == 3){
                 mainMenu.setCurState(3);
-                object.updateTestZombies(3,50,30);
+                object.updateTestZombies(3,25,15);
             }
             objectDrag.updatePeaList(); //update motion of pea of each peashooter
             object.updateLawnMower();
@@ -309,7 +309,6 @@ public class Playing extends State implements StateMethods{
                         objectDrag.updateShovel(new Point(backyard.qualifiedPositionBackyard(e)[0],backyard.qualifiedPositionBackyard(e)[1]));
                         backyard.getAvailableCoordinate()[backyard.qualifiedPositionBackyard(e)[3]][backyard.qualifiedPositionBackyard(e)[4]]--;
 
-
                         
                         AudioPlayer sound = new AudioPlayer("shovel", 2);
                         sound.setVolume(panel.getAudioPlayer().getVolume());
@@ -365,7 +364,6 @@ public class Playing extends State implements StateMethods{
                 Point currentPt = e.getPoint();
                 // get new coordinate by using displacement between the current and the previous mouse
                 objectDrag.getPlantsCardList().get(check2).getImageCorner().translate((int)(currentPt.getX()-prePt.getX()),(int)(currentPt.getY()-prePt.getY()));
-                //System.out.println(check2);
                 prePt = currentPt;
             
             }

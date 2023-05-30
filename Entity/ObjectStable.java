@@ -55,7 +55,6 @@ public class ObjectStable {
 
         this.audioPlayer = audioPlayer;
 
-
     }
     
     public void zombiesListName(int i,int j,int z){
@@ -192,7 +191,7 @@ public class ObjectStable {
                 }
                 else if (zombiesList.size() + n < 3){
                     if (readyToAddZombies())
-                        addTurnZombies(1,2, 0, 0);                   
+                        addTurnZombies(1,2, 0, 1);                   
                 }
                 else if (zombiesList.size() + n >= 3 && zombiesList.size() + n < list[0]){
                     if (readyToAddZombies()){
@@ -201,7 +200,7 @@ public class ObjectStable {
                         if (level == 2)
                             addTurnZombies(1,4, 0, 2);
                         if (level == 3)
-                            addTurnZombies(2,4, 0, 3);
+                            addTurnZombies(2,4, 0, 2);
                     }
                 }
                 else if (zombiesList.size() + n >= list[0] && zombiesList.size() + n < list[1] + list[0]){
@@ -211,7 +210,7 @@ public class ObjectStable {
                         if (level == 2)
                             addTurnZombies(1,4, 1, 3);
                         if (level == 3)
-                            addTurnZombies(3,5, 1, 4);
+                            addTurnZombies(3,5, 0, 3);
                     }
                 }
                 else if (zombiesList.size() + n >= list[1] + list[0] && zombiesList.size()  + n< numTurn){
@@ -221,7 +220,7 @@ public class ObjectStable {
                         if (level == 2)
                             addTurnZombies(2,5, 0, 3);
                         if (level == 3)
-                            addTurnZombies(3,5, 0, 4);
+                            addTurnZombies(3,5, 1, 4);
                     }
                 }
 
